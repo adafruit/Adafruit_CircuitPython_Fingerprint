@@ -12,7 +12,7 @@ Introduction
     :target: https://discord.gg/nBQh6qu
     :alt: Discord
 
-TODO
+This library will let you use an Adafruit Fingerprint sensor on any UART to get, store, retreive and query fingerprints! Great for adding bio-sensing security to your next build.
 
 Dependencies
 =============
@@ -27,7 +27,7 @@ This is easily achieved by downloading
 Usage Example
 =============
 
-TODO
+See 'examples' folder for full usage demo!
 
 API Reference
 =============
