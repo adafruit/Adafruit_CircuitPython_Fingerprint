@@ -15,7 +15,12 @@ extensions = [
     'sphinx.ext.viewcode',
 ]
 
-intersphinx_mapping = {'python': ('https://docs.python.org/3.4', None),'BusDevice': ('https://circuitpython.readthedocs.io/projects/bus_device/en/latest/', None),'Register': ('https://circuitpython.readthedocs.io/projects/register/en/latest/', None),'CircuitPython': ('https://circuitpython.readthedocs.io/en/latest/', None)}
+# Uncomment the below if you use native CircuitPython modules such as
+# digitalio, micropython and busio. List the modules you use. Without it, the
+# autodoc module docs will fail to generate with a warning.
+# autodoc_mock_imports = ["digitalio", "busio"]
+
+intersphinx_mapping = {'python': ('https://docs.python.org/3.4', None),'CircuitPython': ('https://circuitpython.readthedocs.io/en/latest/', None)}
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -26,7 +31,7 @@ source_suffix = '.rst'
 master_doc = 'README'
 
 # General information about the project.
-project = u'Adafruit FINGERPRINT Library'
+project = u'Adafruit Fingerprint Library'
 copyright = u'2017 ladyada'
 author = u'ladyada'
 
@@ -91,7 +96,7 @@ else:
 html_static_path = ['_static']
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'AdafruitFINGERPRINTLibrarydoc'
+htmlhelp_basename = 'AdafruitFingerprintLibrarydoc'
 
 # -- Options for LaTeX output ---------------------------------------------
 
@@ -117,7 +122,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'AdafruitFINGERPRINTLibrary.tex', u'Adafruit FINGERPRINT Library Documentation',
+    (master_doc, 'AdafruitFingerprintLibrary.tex', u'AdafruitFingerprint Library Documentation',
      author, 'manual'),
 ]
 
@@ -126,7 +131,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'adafruitFINGERPRINTlibrary', u'Adafruit FINGERPRINT Library Documentation',
+    (master_doc, 'AdafruitFingerprintlibrary', u'Adafruit Fingerprint Library Documentation',
      [author], 1)
 ]
 
@@ -136,7 +141,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'AdafruitFINGERPRINTLibrary', u'Adafruit FINGERPRINT Library Documentation',
-     author, 'AdafruitFINGERPRINTLibrary', 'One line description of project.',
+    (master_doc, 'AdafruitFingerprintLibrary', u'Adafruit Fingerprint Library Documentation',
+     author, 'AdafruitFingerprintLibrary', 'One line description of project.',
      'Miscellaneous'),
 ]
