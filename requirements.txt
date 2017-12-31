@@ -1,2 +1,1 @@
-adafruit-circuitpython-bus-device
-adafruit-circuitpython-register
+
