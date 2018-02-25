@@ -23,9 +23,22 @@
 `adafruit_fingerprint`
 ====================================================
 
-TODO(description)
+This library will let you use an Adafruit Fingerprint sensor on any UART to get, store,
+retreive and query fingerprints! Great for adding bio-sensing security to your next build.
 
 * Author(s): ladyada
+
+Implementation Notes
+--------------------
+
+**Hardware:**
+
+* `Fingerprint sensor <https://www.adafruit.com/product/751>`_ (Product ID: 751)
+
+**Software and Dependencies:**
+
+* Adafruit CircuitPython firmware (2.2.0+) for the ESP8622 and M0-based boards:
+  https://github.com/adafruit/circuitpython/releases
 """
 
 from micropython import const
@@ -105,7 +118,7 @@ class Adafruit_Fingerprint:
 
     def count_templates(self):
         """Requests the sensor to count the number of templates and stores it
-        in self.template_count. Returns the packet error code or OK success"""
+        in ``self.template_count``. Returns the packet error code or OK success"""
         self._send_packet([_TEMPLATECOUNT])
         r = self._get_packet(14)
         self.template_count = struct.unpack('>H', bytes(r[1:]))[0]
