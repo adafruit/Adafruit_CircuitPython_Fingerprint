@@ -121,7 +121,7 @@ class Adafruit_Fingerprint:
         in ``self.template_count``. Returns the packet error code or OK success"""
         self._send_packet([_TEMPLATECOUNT])
         r = self._get_packet(14)
-        self.template_count = struct.unpack('>H', bytes(r[1:]))[0]
+        self.template_count = struct.unpack('>H', bytes(r[1:3]))[0]
         return r[0]
 
     def get_image(self):
@@ -174,7 +174,7 @@ class Adafruit_Fingerprint:
         # high speed search of slot #1 starting at page 0x0000 and page #0x00A3
         self._send_packet([_HISPEEDSEARCH, 0x01, 0x00, 0x00, 0x00, 0xA3])
         r = self._get_packet(16)
-        self.finger_id, self.confidence = struct.unpack('>HH', bytes(r[1:]))
+        self.finger_id, self.confidence = struct.unpack('>HH', bytes(r[1:5]))
         return r[0]
 
 ##################################################
@@ -188,7 +188,7 @@ class Adafruit_Fingerprint:
             raise RuntimeError('Failed to read data from sensor')
 
         # first two bytes are start code
-        start = struct.unpack('>H', res)[0]
+        start = struct.unpack('>H', res[0:2])[0]
 
         if start != _STARTCODE:
             raise RuntimeError('Incorrect packet data')
@@ -197,7 +197,7 @@ class Adafruit_Fingerprint:
         if addr != self.address:
             raise RuntimeError('Incorrect address')
 
-        packet_type, length = struct.unpack('>BH', res[6:])
+        packet_type, length = struct.unpack('>BH', res[6:9])
         if packet_type != _ACKPACKET:
             raise RuntimeError('Incorrect packet data')
 
