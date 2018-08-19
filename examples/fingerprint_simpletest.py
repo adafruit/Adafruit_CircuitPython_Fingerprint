@@ -7,7 +7,7 @@ import adafruit_fingerprint
 led = DigitalInOut(board.D13)
 led.direction = Direction.OUTPUT
 
-uart = busio.UART(board.TX, board.RX, baudrate=57600, timeout=1)
+uart = busio.UART(board.TX, board.RX, baudrate=57600)
 
 # If using with a computer such as Linux/RaspberryPi, Mac, Windows...
 #import serial
