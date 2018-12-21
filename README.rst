@@ -10,8 +10,8 @@ Introduction
     :target: https://discord.gg/nBQh6qu
     :alt: Discord
 
-.. image:: https://travis-ci.org/adafruit/Adafruit_CircuitPython_Fingerprint.svg?branch=master
-    :target: https://travis-ci.org/adafruit/Adafruit_CircuitPython_Fingerprint
+.. image:: https://travis-ci.com/adafruit/Adafruit_CircuitPython_Fingerprint.svg?branch=master
+    :target: https://travis-ci.com/adafruit/Adafruit_CircuitPython_Fingerprint
     :alt: Build Status
 
 This library will let you use an Adafruit Fingerprint sensor on any UART to get, store, retreive and query fingerprints! Great for adding bio-sensing security to your next build.
