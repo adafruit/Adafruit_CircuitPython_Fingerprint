@@ -1,6 +1,6 @@
 import time
 import board
-import busio
+#import busio
 from digitalio import DigitalInOut, Direction
 import adafruit_fingerprint
 
@@ -10,7 +10,7 @@ led.direction = Direction.OUTPUT
 #uart = busio.UART(board.TX, board.RX, baudrate=57600)
 
 # If using with a computer such as Linux/RaspberryPi, Mac, Windows...
-#import serial
+import serial
 #uart = serial.Serial("/dev/ttyUSB0", baudrate=57600, timeout=1)
 uart = serial.Serial("/dev/ttyAMA0", baudrate=57600, timeout=1)
 
@@ -194,8 +194,7 @@ while True:
         else:
             print("Failed to delete")
     if c == 'r':
-        finger._send_packet([adafruit_fingerprint._EMPTY])
-        if finger._get_packet(12)[0] == adafruit_fingerprint.OK:
+        if finger.empty_library() == adafruit_fingerprint.OK:
             print("Library empty!")
         else:
             print("Failed to empty library")
