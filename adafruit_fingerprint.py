@@ -159,7 +159,6 @@ class Adafruit_Fingerprint:
         Returns the packet error code or OK success"""
         self._send_packet([_EMPTY])
         return self._get_packet(12)[0]
-        
 
     def read_templates(self):
         """Requests the sensor to list of all template locations in use and
