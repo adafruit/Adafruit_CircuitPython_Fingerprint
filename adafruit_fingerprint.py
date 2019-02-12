@@ -154,6 +154,13 @@ class Adafruit_Fingerprint:
         self._send_packet([_DELETE, location >> 8, location & 0xFF, 0x00, 0x01])
         return self._get_packet(12)[0]
 
+    def empty_library(self):
+        """Requests the sensor to delete all models from flash memory.
+        Returns the packet error code or OK success"""
+        self._send_packet([_EMPTY])
+        return self._get_packet(12)[0]
+        
+
     def read_templates(self):
         """Requests the sensor to list of all template locations in use and
         stores them in self.templates. Returns the packet error code or OK success"""
