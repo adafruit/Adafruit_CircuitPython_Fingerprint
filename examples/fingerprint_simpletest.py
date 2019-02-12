@@ -1,9 +1,9 @@
 import time
 import board
 #import busio
-import serial
 from digitalio import DigitalInOut, Direction
 import adafruit_fingerprint
+import serial
 
 led = DigitalInOut(board.D13)
 led.direction = Direction.OUTPUT
