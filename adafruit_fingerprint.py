@@ -157,14 +157,20 @@ class Adafruit_Fingerprint:
     def read_templates(self):
         """Requests the sensor to list of all template locations in use and
         stores them in self.templates. Returns the packet error code or OK success"""
-        self._send_packet([_TEMPLATEREAD, 0x00])
-        r = self._get_packet(44)
         self.templates = []
-        for i in range(32):
-            byte = r[i+1]
-            for bit in range(8):
-                if byte & (1 << bit):
-                    self.templates.append(i * 8 + bit)
+        r1 = [ 0x0c, ]
+        for j in range(4):
+            self._send_packet([_TEMPLATEREAD, j])
+            r = self._get_packet(44)
+            if r[0] == OK:
+                for i in range(32):
+                    byte = r[i+1]
+                    for bit in range(8):
+                        if byte & (1 << bit):
+                            self.templates.append(i * 8 + bit + j * 256)
+                r1 = r
+            else:
+                r = r1
         return r[0]
 
     def finger_fast_search(self):
@@ -172,7 +178,8 @@ class Adafruit_Fingerprint:
         last model generated. Stores the location and confidence in self.finger_id
         and self.confidence. Returns the packet error code or OK success"""
         # high speed search of slot #1 starting at page 0x0000 and page #0x00A3
-        self._send_packet([_HISPEEDSEARCH, 0x01, 0x00, 0x00, 0x00, 0xA3])
+        #self._send_packet([_HISPEEDSEARCH, 0x01, 0x00, 0x00, 0x00, 0xA3])
+        self._send_packet([_HISPEEDSEARCH, 0x01, 0x00, 0x00, 0x03, 0xE8])
         r = self._get_packet(16)
         self.finger_id, self.confidence = struct.unpack('>HH', bytes(r[1:5]))
         return r[0]
