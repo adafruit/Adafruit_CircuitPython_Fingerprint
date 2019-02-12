@@ -158,7 +158,7 @@ class Adafruit_Fingerprint:
         """Requests the sensor to list of all template locations in use and
         stores them in self.templates. Returns the packet error code or OK success"""
         self.templates = []
-        r1 = [ 0x0c, ]
+        temp_r = [0x0c, ]
         for j in range(4):
             self._send_packet([_TEMPLATEREAD, j])
             r = self._get_packet(44)
@@ -168,9 +168,9 @@ class Adafruit_Fingerprint:
                     for bit in range(8):
                         if byte & (1 << bit):
                             self.templates.append(i * 8 + bit + j * 256)
-                r1 = r
+                temp_r = r
             else:
-                r = r1
+                r = temp_r
         return r[0]
 
     def finger_fast_search(self):
