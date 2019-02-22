@@ -162,7 +162,7 @@ class Adafruit_Fingerprint:
         self._send_packet([_GETIMAGE])
         return self._get_packet(12)[0]
 
-    def image_2_tz(self, slot):
+    def image_2_tz(self, slot=1):
         """Requests the sensor convert the image to a template, returns
         the packet error code or OK success"""
         self._send_packet([_IMAGE2TZ, slot])
@@ -174,7 +174,7 @@ class Adafruit_Fingerprint:
         self._send_packet([_REGMODEL])
         return self._get_packet(12)[0]
 
-    def store_model(self, location, charbuf):
+    def store_model(self, location, charbuf=1):
         """Requests the sensor store the model into flash memory and assign
         a location. Returns the packet error code or OK success"""
         self._send_packet([_STORE, charbuf, location >> 8, location & 0xFF])
@@ -186,22 +186,23 @@ class Adafruit_Fingerprint:
         self._send_packet([_DELETE, location >> 8, location & 0xFF, 0x00, 0x01])
         return self._get_packet(12)[0]
 
-    def load_model(self, location, charbuf):
-        """
+    def load_model(self, location, charbuf=1):
+        """Requests the sensor to load a model from the given memory location
+        to the given charbuf.  Returns the packet error code or success"""
         """
         self._send_packet([_LOAD, charbuf, location >> 8, location & 0xFF])
         return self._get_packet(12)[0]
 
-    def get_fpdata(self, buffer='char', slot=1):
+    def get_fpdata(self, buffer='char', charbuf=1):
         """Requests the sensor to transfer the fingerprint image or
         template.  Returns the data payload only."""
-        if slot != 1 or slot != 2:
+        if charbuf != 1 or charbuf != 2:
             # raise error or use default value?
-            slot = 1
+            charbuf = 1
         if buffer == 'image':
             self._send_packet([_UPLOADIMAGE])
         elif buffer == 'char':
-            self._send_packet([_UPLOAD, slot])
+            self._send_packet([_UPLOAD, charbuf])
         else:
             raise RuntimeError('Uknown buffer type')
         if self._get_packet(12)[0] == 0:
@@ -210,20 +211,19 @@ class Adafruit_Fingerprint:
         #print(res)
         return res
 
-    def send_fpdata(self, data, buffer='char', slot=1):
+    def send_fpdata(self, data, buffer='char', charbuf=1):
         """ONGOING"""
-        print(slot)
-        if slot != 1 or slot != 2:
+        if charbuf != 1 or charbuf != 2:
             # raise error or use default value?
-            slot = 2
+            charbuf = 2
         if buffer == 'image':
             self._send_packet([_DOWNLOADIMAGE])
         elif buffer == 'char':
-            self._send_packet([_DOWNLOAD, slot])
+            self._send_packet([_DOWNLOAD, charbuf])
         else:
             raise RuntimeError('Uknown buffer type')
         if self._get_packet(12)[0] == 0:
-            self._send_data(data) 
+            self._send_data(data)
             #print('datasize: ' + str(len(res)))
         #print(res)
         return True
@@ -364,7 +364,6 @@ class Adafruit_Fingerprint:
         self._uart.write(bytearray(packet))
 
     def _send_data(self, data):
-        """ONGOING"""
         print(len(data))
         self.read_sysparam()
         if self.data_packet_size == 0:
@@ -376,6 +375,7 @@ class Adafruit_Fingerprint:
         elif self.data_packet_size == 3:
             data_length = 256
 
+        i = 0
         for i in range(int(len(data) / (data_length - 2))):
             start = i * (data_length - 2)
             end = (i + 1) * (data_length - 2)
