@@ -189,7 +189,6 @@ class Adafruit_Fingerprint:
     def load_model(self, location, charbuf=1):
         """Requests the sensor to load a model from the given memory location
         to the given charbuf.  Returns the packet error code or success"""
-        """
         self._send_packet([_LOAD, charbuf, location >> 8, location & 0xFF])
         return self._get_packet(12)[0]
 
@@ -212,7 +211,8 @@ class Adafruit_Fingerprint:
         return res
 
     def send_fpdata(self, data, buffer='char', charbuf=1):
-        """ONGOING"""
+        """Requests the sensor to receive data, either a fingerprint image or
+        a character/template data.  Data is the payload only."""
         if charbuf != 1 or charbuf != 2:
             # raise error or use default value?
             charbuf = 2
