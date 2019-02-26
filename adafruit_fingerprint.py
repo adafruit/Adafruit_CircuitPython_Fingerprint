@@ -174,10 +174,10 @@ class Adafruit_Fingerprint:
         self._send_packet([_REGMODEL])
         return self._get_packet(12)[0]
 
-    def store_model(self, location, charbuf=1):
+    def store_model(self, location, slot=1):
         """Requests the sensor store the model into flash memory and assign
         a location. Returns the packet error code or OK success"""
-        self._send_packet([_STORE, charbuf, location >> 8, location & 0xFF])
+        self._send_packet([_STORE, slot, location >> 8, location & 0xFF])
         return self._get_packet(12)[0]
 
     def delete_model(self, location):
@@ -186,22 +186,22 @@ class Adafruit_Fingerprint:
         self._send_packet([_DELETE, location >> 8, location & 0xFF, 0x00, 0x01])
         return self._get_packet(12)[0]
 
-    def load_model(self, location, charbuf=1):
+    def load_model(self, location, slot=1):
         """Requests the sensor to load a model from the given memory location
-        to the given charbuf.  Returns the packet error code or success"""
-        self._send_packet([_LOAD, charbuf, location >> 8, location & 0xFF])
+        to the given slot.  Returns the packet error code or success"""
+        self._send_packet([_LOAD, slot, location >> 8, location & 0xFF])
         return self._get_packet(12)[0]
 
-    def get_fpdata(self, buffer='char', charbuf=1):
+    def get_fpdata(self, buffer='char', slot=1):
         """Requests the sensor to transfer the fingerprint image or
         template.  Returns the data payload only."""
-        if charbuf != 1 or charbuf != 2:
+        if slot != 1 or slot != 2:
             # raise error or use default value?
-            charbuf = 1
+            slot = 2
         if buffer == 'image':
             self._send_packet([_UPLOADIMAGE])
         elif buffer == 'char':
-            self._send_packet([_UPLOAD, charbuf])
+            self._send_packet([_UPLOAD, slot])
         else:
             raise RuntimeError('Uknown buffer type')
         if self._get_packet(12)[0] == 0:
@@ -210,16 +210,16 @@ class Adafruit_Fingerprint:
         #print(res)
         return res
 
-    def send_fpdata(self, data, buffer='char', charbuf=1):
+    def send_fpdata(self, data, buffer='char', slot=1):
         """Requests the sensor to receive data, either a fingerprint image or
         a character/template data.  Data is the payload only."""
-        if charbuf != 1 or charbuf != 2:
+        if slot != 1 or slot != 2:
             # raise error or use default value?
-            charbuf = 2
+            slot = 2
         if buffer == 'image':
             self._send_packet([_DOWNLOADIMAGE])
         elif buffer == 'char':
-            self._send_packet([_DOWNLOAD, charbuf])
+            self._send_packet([_DOWNLOAD, slot])
         else:
             raise RuntimeError('Uknown buffer type')
         if self._get_packet(12)[0] == 0:
@@ -240,7 +240,7 @@ class Adafruit_Fingerprint:
         self.templates = []
         self.read_sysparam()
         temp_r = [0x0c, ]
-        for j in range(int(self.library_size/250)):
+        for j in range(int(self.library_size/256)):
             self._send_packet([_TEMPLATEREAD, j])
             r = self._get_packet(44)
             if r[0] == OK:
@@ -261,7 +261,12 @@ class Adafruit_Fingerprint:
         # high speed search of slot #1 starting at page 0x0000 and page #0x00A3
         #self._send_packet([_HISPEEDSEARCH, 0x01, 0x00, 0x00, 0x00, 0xA3])
         # or page #0x03E9 to accommodate modules with up to 1000 capacity
-        self._send_packet([_HISPEEDSEARCH, 0x01, 0x00, 0x00, 0x03, 0xE9])
+        #self._send_packet([_HISPEEDSEARCH, 0x01, 0x00, 0x00, 0x03, 0xE9])
+        # or base the page on module's capacity
+        self.read_sysparam()
+        capacity = self.library_size
+        self._send_packet([_HISPEEDSEARCH, 0x01, 0x00, 0x00, capacity >> 8,
+                           capacity & 0xFF])
         r = self._get_packet(16)
         self.finger_id, self.confidence = struct.unpack('>HH', bytes(r[1:5]))
         return r[0]
