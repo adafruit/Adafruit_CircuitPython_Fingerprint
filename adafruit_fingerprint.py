@@ -206,8 +206,8 @@ class Adafruit_Fingerprint:
             raise RuntimeError('Uknown buffer type')
         if self._get_packet(12)[0] == 0:
             res = self._get_data(9)
-            #print('datasize: ' + str(len(res)))
-        #print(res)
+            # print('datasize: ' + str(len(res)))
+        # print(res)
         return res
 
     def send_fpdata(self, data, buffer='char', slot=1):
@@ -224,8 +224,8 @@ class Adafruit_Fingerprint:
             raise RuntimeError('Uknown buffer type')
         if self._get_packet(12)[0] == 0:
             self._send_data(data)
-            #print('datasize: ' + str(len(res)))
-        #print(res)
+            # print('datasize: ' + str(len(res)))
+        # print(res)
         return True
 
     def empty_library(self):
@@ -236,11 +236,13 @@ class Adafruit_Fingerprint:
 
     def read_templates(self):
         """Requests the sensor to list of all template locations in use and
-        stores them in self.templates. Returns the packet error code or OK success"""
+        stores them in self.templates. Returns the packet error code or
+        OK success"""
+        import math
         self.templates = []
         self.read_sysparam()
         temp_r = [0x0c, ]
-        for j in range(int(self.library_size/256)):
+        for j in range(math.ceil(self.library_size/256)):
             self._send_packet([_TEMPLATEREAD, j])
             r = self._get_packet(44)
             if r[0] == OK:
@@ -311,18 +313,18 @@ class Adafruit_Fingerprint:
         and _ENDDATAPACKET.  Alternate method for getting data such
         as fingerprint image, etc.  Returns the data payload."""
         res = self._uart.read(expected)
-        #print("Got", res)
+        # print("Got", res)
         if (not res) or (len(res) != expected):
             raise RuntimeError('Failed to read data from sensor')
 
         # first two bytes are start code
         start = struct.unpack('>H', res[0:2])[0]
-        #print(start)
+        # print(start)
         if start != _STARTCODE:
             raise RuntimeError('Incorrect packet data')
         # next 4 bytes are address
         addr = [i for i in res[2:6]]
-        #print(addr)
+        # print(addr)
         if addr != self.address:
             raise RuntimeError('Incorrect address')
 
@@ -339,15 +341,15 @@ class Adafruit_Fingerprint:
             res = self._uart.read(length-2)
             # todo: we should really inspect the headers and checksum
             reply = [i for i in res[0:length]]
-            self._uart.read(2) # disregard checksum but we really shouldn't
+            self._uart.read(2)  # disregard checksum but we really shouldn't
             reply += self._get_data(9)
         elif packet_type == _ENDDATAPACKET:
             res = self._uart.read(length-2)
             # todo: we should really inspect the headers and checksum
             reply = [i for i in res[0:length]]
-            self._uart.read(2) # disregard checksum but we really shouldn't
+            self._uart.read(2)  # disregard checksum but we really shouldn't
         print(len(reply))
-        #print(reply)
+        # print(reply)
         return reply
 
     def _send_packet(self, data):
@@ -384,57 +386,57 @@ class Adafruit_Fingerprint:
         for i in range(int(len(data) / (data_length - 2))):
             start = i * (data_length - 2)
             end = (i + 1) * (data_length - 2)
-            #print(start)
-            #print(end)
-            #print(i)
+            # print(start)
+            # print(end)
+            # print(i)
 
             packet = [_STARTCODE >> 8, _STARTCODE & 0xFF]
             packet = packet + self.address
             packet.append(_DATAPACKET)
             length = len(data[start:end]) + 2
-            #print(length)
+            # print(length)
             packet.append(length >> 8)
             packet.append(length & 0xFF)
             checksum = _DATAPACKET + (length >> 8) + (length & 0xFF)
 
             for j in range(len(data[start:end])):
                 packet.append(data[j])
-                #packet.append(struct.pack('@B', data[j]))
+                # packet.append(struct.pack('@B', data[j]))
                 checksum += data[j]
 
             packet.append(checksum >> 8)
             packet.append(checksum & 0xFF)
 
-            #print("Sending: ", [hex(i) for i in packet])
-            #self._uart.write(bytearray(packet))
+            # print("Sending: ", [hex(i) for i in packet])
+            # self._uart.write(bytearray(packet))
             self._uart.write(packet)
-            #print(i)
+            # print(i)
 
         i += 1
         start = i * (data_length - 2)
         end = (i + 1) * (data_length - 2)
-        #print(start)
-        #print(end)
-        #print(i)
+        # print(start)
+        # print(end)
+        # print(i)
 
         packet = [_STARTCODE >> 8, _STARTCODE & 0xFF]
         packet = packet + self.address
         packet.append(_ENDDATAPACKET)
         length = len(data[start:end]) + 2
-        #print(length)
+        # print(length)
         packet.append(length >> 8)
         packet.append(length & 0xFF)
         checksum = _DATAPACKET + (length >> 8) + (length & 0xFF)
 
         for j in range(len(data[start:end])):
             packet.append(data[j])
-            #packet.append(struct.pack('@B', data[j]))
+            # packet.append(struct.pack('@B', data[j]))
             checksum += data[j]
 
         packet.append(checksum >> 8)
         packet.append(checksum & 0xFF)
 
-        #print("Sending: ", [hex(i) for i in packet])
-        #self._uart.write(bytearray(packet))
+        # print("Sending: ", [hex(i) for i in packet])
+        # self._uart.write(bytearray(packet))
         self._uart.write(packet)
-        #print(i)
+        # print(i)
