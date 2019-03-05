@@ -192,36 +192,36 @@ class Adafruit_Fingerprint:
         self._send_packet([_LOAD, slot, location >> 8, location & 0xFF])
         return self._get_packet(12)[0]
 
-    def get_fpdata(self, buffer='char', slot=1):
+    def get_fpdata(self, sensorbuffer='char', slot=1):
         """Requests the sensor to transfer the fingerprint image or
         template.  Returns the data payload only."""
         if slot != 1 or slot != 2:
             # raise error or use default value?
             slot = 2
-        if buffer == 'image':
+        if sensorbuffer == 'image':
             self._send_packet([_UPLOADIMAGE])
-        elif buffer == 'char':
+        elif sensorbuffer == 'char':
             self._send_packet([_UPLOAD, slot])
         else:
-            raise RuntimeError('Uknown buffer type')
+            raise RuntimeError('Uknown sensor buffer type')
         if self._get_packet(12)[0] == 0:
             res = self._get_data(9)
             # print('datasize: ' + str(len(res)))
         # print(res)
         return res
 
-    def send_fpdata(self, data, buffer='char', slot=1):
+    def send_fpdata(self, data, sensorbuffer='char', slot=1):
         """Requests the sensor to receive data, either a fingerprint image or
         a character/template data.  Data is the payload only."""
         if slot != 1 or slot != 2:
             # raise error or use default value?
             slot = 2
-        if buffer == 'image':
+        if sensorbuffer == 'image':
             self._send_packet([_DOWNLOADIMAGE])
-        elif buffer == 'char':
+        elif sensorbuffer == 'char':
             self._send_packet([_DOWNLOAD, slot])
         else:
-            raise RuntimeError('Uknown buffer type')
+            raise RuntimeError('Uknown sensor buffer type')
         if self._get_packet(12)[0] == 0:
             self._send_data(data)
             # print('datasize: ' + str(len(res)))
