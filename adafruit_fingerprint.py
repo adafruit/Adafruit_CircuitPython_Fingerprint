@@ -426,7 +426,7 @@ class Adafruit_Fingerprint:
         # print(length)
         packet.append(length >> 8)
         packet.append(length & 0xFF)
-        checksum = _DATAPACKET + (length >> 8) + (length & 0xFF)
+        checksum = _ENDDATAPACKET + (length >> 8) + (length & 0xFF)
 
         for j in range(len(data[start:end])):
             packet.append(data[j])
