@@ -271,6 +271,7 @@ class Adafruit_Fingerprint:
                            capacity & 0xFF])
         r = self._get_packet(16)
         self.finger_id, self.confidence = struct.unpack('>HH', bytes(r[1:5]))
+        # print(r)
         return r[0]
 
 ##################################################
@@ -313,7 +314,6 @@ class Adafruit_Fingerprint:
         and _ENDDATAPACKET.  Alternate method for getting data such
         as fingerprint image, etc.  Returns the data payload."""
         res = self._uart.read(expected)
-        # print("Got", res)
         if (not res) or (len(res) != expected):
             raise RuntimeError('Failed to read data from sensor')
 
@@ -348,7 +348,7 @@ class Adafruit_Fingerprint:
             # todo: we should really inspect the headers and checksum
             reply = [i for i in res[0:length]]
             self._uart.read(2)  # disregard checksum but we really shouldn't
-        print(len(reply))
+        # print(len(reply))
         # print(reply)
         return reply
 
@@ -401,14 +401,12 @@ class Adafruit_Fingerprint:
 
             for j in range(len(data[start:end])):
                 packet.append(data[j])
-                # packet.append(struct.pack('@B', data[j]))
                 checksum += data[j]
 
             packet.append(checksum >> 8)
             packet.append(checksum & 0xFF)
 
             # print("Sending: ", [hex(i) for i in packet])
-            # self._uart.write(bytearray(packet))
             self._uart.write(packet)
             # print(i)
 
@@ -430,13 +428,11 @@ class Adafruit_Fingerprint:
 
         for j in range(len(data[start:end])):
             packet.append(data[j])
-            # packet.append(struct.pack('@B', data[j]))
             checksum += data[j]
 
         packet.append(checksum >> 8)
         packet.append(checksum & 0xFF)
 
         # print("Sending: ", [hex(i) for i in packet])
-        # self._uart.write(bytearray(packet))
         self._uart.write(packet)
         # print(i)
