@@ -1,19 +1,17 @@
 import time
 import board
-#import busio
+import busio
 from digitalio import DigitalInOut, Direction
 import adafruit_fingerprint
-import serial
 
 led = DigitalInOut(board.D13)
 led.direction = Direction.OUTPUT
 
-#uart = busio.UART(board.TX, board.RX, baudrate=57600)
+uart = busio.UART(board.TX, board.RX, baudrate=57600)
 
 # If using with a computer such as Linux/RaspberryPi, Mac, Windows with USB/serial converter:
 #import serial
 #uart = serial.Serial("/dev/ttyUSB0", baudrate=57600, timeout=1)
-uart = serial.Serial("/dev/ttyAMA0", baudrate=57600, timeout=1)
 
 # If using with Linux/Raspberry Pi and hardware UART:
 #import serial
@@ -158,13 +156,10 @@ def enroll_finger(location):
 
 def get_num():
     """Use input() to get a valid number from 1 to 127. Retry till success!"""
-    #i = 0
-    i = -1
-    #while (i > 127) or (i < 1):
-    while (i > 999) or (i < 0):
+    i = 0
+    while (i > 127) or (i < 1):
         try:
-            #i = int(input("Enter ID # from 1-127: "))
-            i = int(input("Enter ID # from 0-999: "))
+            i = int(input("Enter ID # from 1-127: "))
         except ValueError:
             pass
     return i
@@ -175,14 +170,9 @@ while True:
     if finger.read_templates() != adafruit_fingerprint.OK:
         raise RuntimeError('Failed to read templates')
     print("Fingerprint templates:", finger.templates)
-    if finger.count_templates() != adafruit_fingerprint.OK:
-        raise RuntimeError('Failed to read templates')
-    print("Number of templates: ", finger.template_count)
-    print("e) enroll print")
     print("e) enroll print")
     print("f) find print")
     print("d) delete print")
-    print("r) reset library")
     print("----------------")
     c = input("> ")
 
@@ -198,8 +188,3 @@ while True:
             print("Deleted!")
         else:
             print("Failed to delete")
-    if c == 'r':
-        if finger.empty_library() == adafruit_fingerprint.OK:
-            print("Library empty!")
-        else:
-            print("Failed to empty library")
