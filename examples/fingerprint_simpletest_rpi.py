@@ -1,6 +1,7 @@
 import time
 import board
-import busio
+#import busio
+import serial
 from digitalio import DigitalInOut, Direction
 import adafruit_fingerprint
 
@@ -18,7 +19,7 @@ led.direction = Direction.OUTPUT
 #uart = serial.Serial("/dev/ttyS0", baudrate=57600, timeout=1)
 
 # If using with Linux/Raspberry Pi 3 with pi3-disable-bt
-import serial
+#import serial
 uart = serial.Serial("/dev/ttyAMA0", baudrate=57600, timeout=1)
 
 finger = adafruit_fingerprint.Adafruit_Fingerprint(uart)
