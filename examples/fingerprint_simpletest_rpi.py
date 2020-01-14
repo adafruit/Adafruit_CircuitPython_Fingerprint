@@ -156,6 +156,41 @@ def enroll_finger(location):
 
     return True
 
+def save_fingerprint_image(filename):
+    """Scan fingerprint then save image to filename."""
+    while finger.get_image():
+        pass
+
+    # let PIL take care of the image headers and file structure
+    from PIL import Image
+    img = Image.new('L', (256, 288), 'white')
+    pixeldata = img.load()
+    mask = 0b00001111
+    result = finger.get_fpdata(sensorbuffer="image")
+
+    # this block "unpacks" the data received from the fingerprint
+    #   module then copies the image data to the image placeholder "img"
+    #   pixel by pixel.  please refer to section 4.2.1 of the manual for
+    #   more details.  thanks to Bastian Raschke and Danylo Esterman.
+    # pylint: disable=invalid-name
+    x = 0
+    # pylint: disable=invalid-name
+    y = 0
+    # pylint: disable=consider-using-enumerate
+    for i in range(len(result)):
+        pixeldata[x, y] = (int(result[i]) >> 4) * 17
+        x += 1
+        pixeldata[x, y] = (int(result[i]) & mask) * 17
+        if x == 255:
+            x = 0
+            y += 1
+        else:
+            x += 1
+
+    if not img.save(filename):
+        return True
+    return False
+
 
 ##################################################
 
@@ -185,7 +220,9 @@ while True:
     print("e) enroll print")
     print("f) find print")
     print("d) delete print")
+    print("s) save fingerprint image")
     print("r) reset library")
+    print("q) quit")
     print("----------------")
     c = input("> ")
 
@@ -201,8 +238,16 @@ while True:
             print("Deleted!")
         else:
             print("Failed to delete")
+    if c == 's':
+        if save_fingerprint_image("fingerprint.png"):
+            print("Fingerprint image saved")
+        else:
+            print("Failed to save fingerprint image")
     if c == 'r':
         if finger.empty_library() == adafruit_fingerprint.OK:
             print("Library empty!")
         else:
             print("Failed to empty library")
+    if c == 'q':
+        print("Exiting fingerprint example program")
+        raise SystemExit
