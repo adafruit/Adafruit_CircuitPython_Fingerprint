@@ -56,13 +56,6 @@ Usage Example
 
 See 'examples' folder for full usage demo!
 
-API Reference
-=============
-
-.. toctree::
-   :maxdepth: 2
-
-   api
 
 Contributing
 ============
