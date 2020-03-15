@@ -1,6 +1,7 @@
 import time
 import board
-#import busio
+
+# import busio
 import serial
 from digitalio import DigitalInOut, Direction
 import adafruit_fingerprint
@@ -8,18 +9,18 @@ import adafruit_fingerprint
 led = DigitalInOut(board.D13)
 led.direction = Direction.OUTPUT
 
-#uart = busio.UART(board.TX, board.RX, baudrate=57600)
+# uart = busio.UART(board.TX, board.RX, baudrate=57600)
 
 # If using with a computer such as Linux/RaspberryPi, Mac, Windows with USB/serial converter:
-#import serial
-#uart = serial.Serial("/dev/ttyUSB0", baudrate=57600, timeout=1)
+# import serial
+# uart = serial.Serial("/dev/ttyUSB0", baudrate=57600, timeout=1)
 
 # If using with Linux/Raspberry Pi and hardware UART:
-#import serial
-#uart = serial.Serial("/dev/ttyS0", baudrate=57600, timeout=1)
+# import serial
+# uart = serial.Serial("/dev/ttyS0", baudrate=57600, timeout=1)
 
 # If using with Linux/Raspberry Pi 3 with pi3-disable-bt
-#import serial
+# import serial
 uart = serial.Serial("/dev/ttyAMA0", baudrate=57600, timeout=1)
 
 finger = adafruit_fingerprint.Adafruit_Fingerprint(uart)
@@ -39,6 +40,7 @@ def get_fingerprint():
     if finger.finger_fast_search() != adafruit_fingerprint.OK:
         return False
     return True
+
 
 # pylint: disable=too-many-branches
 def get_fingerprint_detail():
@@ -86,6 +88,7 @@ def get_fingerprint_detail():
             print("Other error")
         return False
 
+
 # pylint: disable=too-many-statements
 def enroll_finger(location):
     """Take a 2 finger images and template it, then store in 'location'"""
@@ -100,7 +103,7 @@ def enroll_finger(location):
             if i == adafruit_fingerprint.OK:
                 print("Image taken")
                 break
-            elif i == adafruit_fingerprint.NOFINGER:
+            if i == adafruit_fingerprint.NOFINGER:
                 print(".", end="", flush=True)
             elif i == adafruit_fingerprint.IMAGEFAIL:
                 print("Imaging error")
@@ -156,14 +159,16 @@ def enroll_finger(location):
 
     return True
 
+
 def save_fingerprint_image(filename):
     """Scan fingerprint then save image to filename."""
     while finger.get_image():
         pass
 
     # let PIL take care of the image headers and file structure
-    from PIL import Image
-    img = Image.new('L', (256, 288), 'white')
+    from PIL import Image  # pylint: disable=import-outside-toplevel
+
+    img = Image.new("L", (256, 288), "white")
     pixeldata = img.load()
     mask = 0b00001111
     result = finger.get_fpdata(sensorbuffer="image")
@@ -194,6 +199,7 @@ def save_fingerprint_image(filename):
 
 ##################################################
 
+
 def get_num(max_number):
     """Use input() to get a valid number from 0 to the maximum size
     of the library. Retry till success!"""
@@ -209,13 +215,13 @@ def get_num(max_number):
 while True:
     print("----------------")
     if finger.read_templates() != adafruit_fingerprint.OK:
-        raise RuntimeError('Failed to read templates')
+        raise RuntimeError("Failed to read templates")
     print("Fingerprint templates: ", finger.templates)
     if finger.count_templates() != adafruit_fingerprint.OK:
-        raise RuntimeError('Failed to read templates')
+        raise RuntimeError("Failed to read templates")
     print("Number of templates found: ", finger.template_count)
     if finger.read_sysparam() != adafruit_fingerprint.OK:
-        raise RuntimeError('Failed to get system parameters')
+        raise RuntimeError("Failed to get system parameters")
     print("Size of template library: ", finger.library_size)
     print("e) enroll print")
     print("f) find print")
@@ -226,28 +232,28 @@ while True:
     print("----------------")
     c = input("> ")
 
-    if c == 'e':
+    if c == "e":
         enroll_finger(get_num(finger.library_size))
-    if c == 'f':
+    if c == "f":
         if get_fingerprint():
             print("Detected #", finger.finger_id, "with confidence", finger.confidence)
         else:
             print("Finger not found")
-    if c == 'd':
+    if c == "d":
         if finger.delete_model(get_num(finger.library_size)) == adafruit_fingerprint.OK:
             print("Deleted!")
         else:
             print("Failed to delete")
-    if c == 's':
+    if c == "s":
         if save_fingerprint_image("fingerprint.png"):
             print("Fingerprint image saved")
         else:
             print("Failed to save fingerprint image")
-    if c == 'r':
+    if c == "r":
         if finger.empty_library() == adafruit_fingerprint.OK:
             print("Library empty!")
         else:
             print("Failed to empty library")
-    if c == 'q':
+    if c == "q":
         print("Exiting fingerprint example program")
         raise SystemExit
