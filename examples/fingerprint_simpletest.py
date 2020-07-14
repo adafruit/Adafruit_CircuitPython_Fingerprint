@@ -31,7 +31,7 @@ def get_fingerprint():
     if finger.image_2_tz(1) != adafruit_fingerprint.OK:
         return False
     print("Searching...")
-    if finger.finger_fast_search() != adafruit_fingerprint.OK:
+    if finger.finger_search() != adafruit_fingerprint.OK:
         return False
     return True
 
