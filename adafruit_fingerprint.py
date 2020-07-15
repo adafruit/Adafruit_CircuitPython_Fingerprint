@@ -34,6 +34,7 @@ Implementation Notes
 **Hardware:**
 
 * `Fingerprint sensor <https://www.adafruit.com/product/751>`_ (Product ID: 751)
+* `Panel Mount Fingerprint sensor <https://www.adafruit.com/product/4651>`_ (Product ID: 4651)
 
 **Software and Dependencies:**
 
@@ -59,6 +60,7 @@ _ENDDATAPACKET = const(0x8)
 
 _GETIMAGE = const(0x01)
 _IMAGE2TZ = const(0x02)
+_FINGERPRINTSEARCH = const(0x04)
 _REGMODEL = const(0x05)
 _STORE = const(0x06)
 _LOAD = const(0x07)
@@ -100,7 +102,7 @@ ADDRCODE = const(0x20)
 PASSVERIFY = const(0x21)
 MODULEOK = const(0x55)
 
-
+# pylint: disable=too-many-instance-attributes
 class Adafruit_Fingerprint:
     """UART based fingerprint sensor."""
 
@@ -117,6 +119,8 @@ class Adafruit_Fingerprint:
     device_address = None
     data_packet_size = None
     baudrate = None
+    system_id = None
+    status_register = None
 
     def __init__(self, uart, passwd=(0, 0, 0, 0)):
         # Create object with UART for interface, and default 32-bit password
@@ -152,6 +156,8 @@ class Adafruit_Fingerprint:
         r = self._get_packet(28)
         if r[0] != OK:
             raise RuntimeError("Command failed.")
+        self.status_register = struct.unpack(">H", bytes(r[1:3]))[0]
+        self.system_id = struct.unpack(">H", bytes(r[3:5]))[0]
         self.library_size = struct.unpack(">H", bytes(r[5:7]))[0]
         self.security_level = struct.unpack(">H", bytes(r[7:9]))[0]
         self.device_address = bytes(r[9:13])
@@ -275,6 +281,20 @@ class Adafruit_Fingerprint:
         capacity = self.library_size
         self._send_packet(
             [_HISPEEDSEARCH, 0x01, 0x00, 0x00, capacity >> 8, capacity & 0xFF]
+        )
+        r = self._get_packet(16)
+        self.finger_id, self.confidence = struct.unpack(">HH", bytes(r[1:5]))
+        # print(r)
+        return r[0]
+
+    def finger_search(self):
+        """Asks the sensor to search for a matching fingerprint starting at
+        slot 1. Stores the location and confidence in self.finger_id
+        and self.confidence. Returns the packet error code or OK success"""
+        self.read_sysparam()
+        capacity = self.library_size
+        self._send_packet(
+            [_FINGERPRINTSEARCH, 0x01, 0x00, 0x00, capacity >> 8, capacity & 0xFF]
         )
         r = self._get_packet(16)
         self.finger_id, self.confidence = struct.unpack(">HH", bytes(r[1:5]))

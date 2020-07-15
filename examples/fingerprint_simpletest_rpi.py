@@ -1,8 +1,8 @@
 import time
+import serial
 import board
 
 # import busio
-import serial
 from digitalio import DigitalInOut, Direction
 import adafruit_fingerprint
 
@@ -37,7 +37,7 @@ def get_fingerprint():
     if finger.image_2_tz(1) != adafruit_fingerprint.OK:
         return False
     print("Searching...")
-    if finger.finger_fast_search() != adafruit_fingerprint.OK:
+    if finger.finger_search() != adafruit_fingerprint.OK:
         return False
     return True
 
