@@ -303,7 +303,7 @@ class Adafruit_Fingerprint:
         return r[0]
 
     def set_led(self, color=1, mode=3, speed=0x80, cycles=0):
-        """LED functiom.
+        """LED function -- only for R503 Sensor.
         Parameters: See User Manual for full details
         color: 1=red, 2=blue, 3=purple
         mode: 1-breathe, 2-flash, 3-on, 4-off, 5-fade_on, 6-fade-off
