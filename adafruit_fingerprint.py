@@ -76,6 +76,7 @@ _VERIFYPASSWORD = const(0x13)
 _TEMPLATECOUNT = const(0x1D)
 _TEMPLATEREAD = const(0x1F)
 _GETECHO = const(0x53)
+_SETAURA = const(0x35)
 
 # Packet error code
 OK = const(0x0)
@@ -301,10 +302,21 @@ class Adafruit_Fingerprint:
         # print(r)
         return r[0]
 
+    def set_led(self, color=1, mode=3, speed=0x80, cycles=0):
+        """LED function -- only for R503 Sensor.
+        Parameters: See User Manual for full details
+        color: 1=red, 2=blue, 3=purple
+        mode: 1-breathe, 2-flash, 3-on, 4-off, 5-fade_on, 6-fade-off
+        speed: animation speed 0-255
+        cycles: numbe of time to repeat 0=infinite or 1-255
+        Returns the packet error code or success"""
+        self._send_packet([_SETAURA, mode, speed, color, cycles])
+        return self._get_packet(12)[0]
+
     ##################################################
 
     def _get_packet(self, expected):
-        """ Helper to parse out a packet from the UART and check structure.
+        """Helper to parse out a packet from the UART and check structure.
         Returns just the data payload from the packet"""
         res = self._uart.read(expected)
         # print("Got", res)
@@ -337,7 +349,7 @@ class Adafruit_Fingerprint:
         return reply
 
     def _get_data(self, expected):
-        """ Gets packet from serial and checks structure for _DATAPACKET
+        """Gets packet from serial and checks structure for _DATAPACKET
         and _ENDDATAPACKET.  Alternate method for getting data such
         as fingerprint image, etc.  Returns the data payload."""
         res = self._uart.read(expected)

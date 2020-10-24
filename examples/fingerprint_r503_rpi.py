@@ -3,7 +3,6 @@ import serial
 
 import adafruit_fingerprint
 
-
 # import board
 # uart = busio.UART(board.TX, board.RX, baudrate=57600)
 
@@ -205,7 +204,12 @@ def get_num(max_number):
     return i
 
 
+# initialize LED color
+led_color = 1
+led_mode = 3
 while True:
+    # Turn on LED
+    finger.set_led(color=led_color, mode=led_mode)
     print("----------------")
     if finger.read_templates() != adafruit_fingerprint.OK:
         raise RuntimeError("Failed to read templates")
@@ -221,32 +225,51 @@ while True:
     print("d) delete print")
     print("s) save fingerprint image")
     print("r) reset library")
+    print("l) set LED")
     print("q) quit")
     print("----------------")
     c = input("> ")
 
-    if c == "e":
+    if c == "l":
+        c = input("color(r,b,p anything else=off)> ")
+        led_mode = 3
+        if c == "r":
+            led_color = 1
+        elif c == "b":
+            led_color = 2
+        elif c == "p":
+            led_color = 3
+        else:
+            led_color = 1
+            led_mode = 4
+    elif c == "e":
         enroll_finger(get_num(finger.library_size))
-    if c == "f":
+    elif c == "f":
+        # breathing LED
+        finger.set_led(color=3, mode=1)
         if get_fingerprint():
             print("Detected #", finger.finger_id, "with confidence", finger.confidence)
         else:
             print("Finger not found")
-    if c == "d":
+    elif c == "d":
         if finger.delete_model(get_num(finger.library_size)) == adafruit_fingerprint.OK:
             print("Deleted!")
         else:
             print("Failed to delete")
-    if c == "s":
+    elif c == "s":
         if save_fingerprint_image("fingerprint.png"):
             print("Fingerprint image saved")
         else:
             print("Failed to save fingerprint image")
-    if c == "r":
+    elif c == "r":
         if finger.empty_library() == adafruit_fingerprint.OK:
             print("Library empty!")
         else:
             print("Failed to empty library")
-    if c == "q":
+    elif c == "q":
         print("Exiting fingerprint example program")
+        # turn off LED
+        finger.set_led(mode=4)
         raise SystemExit
+    else:
+        print("Invalid choice: Try again")
