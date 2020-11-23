@@ -154,13 +154,25 @@ def enroll_finger(location):
 
 def save_fingerprint_image(filename):
     """Scan fingerprint then save image to filename."""
-    while finger.get_image():
-        pass
+    print("Place finger on sensor...", end="", flush=True)
+    while True:
+        i = finger.get_image()
+        if i == adafruit_fingerprint.OK:
+            print("Image taken")
+            break
+        if i == adafruit_fingerprint.NOFINGER:
+            print(".", end="", flush=True)
+        elif i == adafruit_fingerprint.IMAGEFAIL:
+            print("Imaging error")
+            return False
+        else:
+            print("Other error")
+            return False
 
     # let PIL take care of the image headers and file structure
     from PIL import Image  # pylint: disable=import-outside-toplevel
 
-    img = Image.new("L", (256, 288), "white")
+    img = Image.new("L", (192, 192), "white")
     pixeldata = img.load()
     mask = 0b00001111
     result = finger.get_fpdata(sensorbuffer="image")
@@ -178,7 +190,7 @@ def save_fingerprint_image(filename):
         pixeldata[x, y] = (int(result[i]) >> 4) * 17
         x += 1
         pixeldata[x, y] = (int(result[i]) & mask) * 17
-        if x == 255:
+        if x == 191:
             x = 0
             y += 1
         else:
