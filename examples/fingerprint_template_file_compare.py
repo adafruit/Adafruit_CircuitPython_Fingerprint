@@ -6,7 +6,7 @@ import adafruit_fingerprint
 # uart = busio.UART(board.TX, board.RX, baudrate=57600)
 
 # If using with a computer such as Linux/RaspberryPi, Mac, Windows with USB/serial converter:
-uart = serial.Serial("COM6", baudrate=57600, timeout=1)
+uart = serial.Serial("COM4", baudrate=57600, timeout=1)
 
 # If using with Linux/Raspberry Pi and hardware UART:
 # uart = serial.Serial("/dev/ttyS0", baudrate=57600, timeout=1)
@@ -122,10 +122,9 @@ def enroll_save_to_file():
 
     print("Downloading template...")
     data = finger.get_fpdata("char", 1)
-    print(data)
     with open("template0.dat", "wb") as f:
         f.write(bytearray(data))
-
+    finger.set_led(color=2, speed=150, mode=6)
     print("Template is saved in template0.dat file.")
 
     return True
@@ -153,8 +152,8 @@ while True:
         raise RuntimeError("Failed to get system parameters")
     print("Package size (x128):", finger.data_packet_size)
     print("Size of template library: ", finger.library_size)
-    print("e) enroll print and save to file (template0.dat)")
-    print("c) compare print to file (template0.dat)")
+    print("e) enroll print and save to file")
+    print("c) compare print to file")
     print("r) soft reset")
     print("x) quit")
     print("----------------")
