@@ -2,7 +2,7 @@ import serial
 import adafruit_fingerprint
 
 
-# import board
+# import board (if you are using a micropython board)
 # uart = busio.UART(board.TX, board.RX, baudrate=57600)
 
 # If using with a computer such as Linux/RaspberryPi, Mac, Windows with USB/serial converter:
@@ -32,7 +32,7 @@ def fingerprint_check_file():
     """Compares a new fingerprint template to an existing template stored in a file
        This is useful when templates are stored centrally (i.e. in a database)"""
     print("Waiting for finger print...")
-    finger.set_led(color=3, mode=1)
+    set_led_local(color=3, mode=1)
     while finger.get_image() != adafruit_fingerprint.OK:
         pass
     print("Templating...")
@@ -46,12 +46,12 @@ def fingerprint_check_file():
 
     i = finger.compare_templates()
     if i == adafruit_fingerprint.OK:
-        finger.set_led(color=2, speed=150, mode=6)
+        set_led_local(color=2, speed=150, mode=6)
         print("Fingerprint match template in file.")
         return True
     else:
         if i == adafruit_fingerprint.NOMATCH:
-            finger.set_led(color=1, mode=2, speed=20, cycles=10)
+            set_led_local(color=1, mode=2, speed=20, cycles=10)
             print("Templates do not match!")
         else:
             print("Other error!")
@@ -60,7 +60,7 @@ def fingerprint_check_file():
 
 def enroll_save_to_file():
     """Take a 2 finger images and template it, then store it in a file"""
-    finger.set_led(color=3, mode=1)
+    set_led_local(color=3, mode=1)
     for fingerimg in range(1, 3):
         if fingerimg == 1:
             print("Place finger on sensor...", end="", flush=True)
@@ -75,11 +75,11 @@ def enroll_save_to_file():
             if i == adafruit_fingerprint.NOFINGER:
                 print(".", end="", flush=True)
             elif i == adafruit_fingerprint.IMAGEFAIL:
-                finger.set_led(color=1, mode=2, speed=20, cycles=10)
+                set_led_local(color=1, mode=2, speed=20, cycles=10)
                 print("Imaging error")
                 return False
             else:
-                finger.set_led(color=1, mode=2, speed=20, cycles=10)
+                set_led_local(color=1, mode=2, speed=20, cycles=10)
                 print("Other error")
                 return False
 
@@ -89,16 +89,16 @@ def enroll_save_to_file():
             print("Templated")
         else:
             if i == adafruit_fingerprint.IMAGEMESS:
-                finger.set_led(color=1, mode=2, speed=20, cycles=10)
+                set_led_local(color=1, mode=2, speed=20, cycles=10)
                 print("Image too messy")
             elif i == adafruit_fingerprint.FEATUREFAIL:
-                finger.set_led(color=1, mode=2, speed=20, cycles=10)
+                set_led_local(color=1, mode=2, speed=20, cycles=10)
                 print("Could not identify features")
             elif i == adafruit_fingerprint.INVALIDIMAGE:
-                finger.set_led(color=1, mode=2, speed=20, cycles=10)
+                set_led_local(color=1, mode=2, speed=20, cycles=10)
                 print("Image invalid")
             else:
-                finger.set_led(color=1, mode=2, speed=20, cycles=10)
+                set_led_local(color=1, mode=2, speed=20, cycles=10)
                 print("Other error")
             return False
 
@@ -113,10 +113,10 @@ def enroll_save_to_file():
         print("Created")
     else:
         if i == adafruit_fingerprint.ENROLLMISMATCH:
-            finger.set_led(color=1, mode=2, speed=20, cycles=10)
+            set_led_local(color=1, mode=2, speed=20, cycles=10)
             print("Prints did not match")
         else:
-            finger.set_led(color=1, mode=2, speed=20, cycles=10)
+            set_led_local(color=1, mode=2, speed=20, cycles=10)
             print("Other error")
         return False
 
@@ -124,21 +124,23 @@ def enroll_save_to_file():
     data = finger.get_fpdata("char", 1)
     with open("template0.dat", "wb") as f:
         f.write(bytearray(data))
-    finger.set_led(color=2, speed=150, mode=6)
+    set_led_local(color=2, speed=150, mode=6)
     print("Template is saved in template0.dat file.")
 
     return True
 
+def set_led_local(color=1, mode=3, speed=0x80, cycles=0):
+    """this is to make sure LED doesn't interfer with example
+       running on models without LED support - needs testing"""
+    try:
+        finger.set_led(color, mode, speed, cycles)
+    except:
+        pass
 
-# initialize LED color
-led_color = 1
-led_mode = 3
 
-finger.set_led(color=3, mode=2, speed=10, cycles=10)
+set_led_local(color=3, mode=2, speed=10, cycles=10)
 
 while True:
-    # Turn on LED
-    #finger.set_led(color=led_color, mode=led_mode)
     print("----------------")
     if finger.read_templates() != adafruit_fingerprint.OK:
         raise RuntimeError("Failed to read templates")
@@ -162,7 +164,7 @@ while True:
     if c == "x" or c == "q":
         print("Exiting fingerprint example program")
         # turn off LED
-        finger.set_led(mode=4)
+        set_led_local(mode=4)
         raise SystemExit
     elif c == "e":
         enroll_save_to_file()

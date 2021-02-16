@@ -25,12 +25,7 @@ Implementation Notes
   https://github.com/adafruit/circuitpython/releases
 """
 
-try:
-    from micropython import const
-except:
-    def const(x):
-        "Emulate making a constant"
-        return x
+from micropython import const
 
 try:
     import struct
@@ -496,7 +491,7 @@ class Adafruit_Fingerprint:
 
     def _print_debug(self, info, data, data_type="str"):
         """Prints debugging information. This is activated
-           by flag __debug"""
+           by flag _debug"""
         if not self._debug:
             return
 
