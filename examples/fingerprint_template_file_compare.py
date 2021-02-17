@@ -1,6 +1,27 @@
 # SPDX-FileCopyrightText: 2021 ladyada for Adafruit Industries
 # SPDX-License-Identifier: MIT
 
+"""
+`fingerprint_template_file_compare.py`
+====================================================
+
+This is an example program to demo storing fingerprint templates in a file. It also allows
+comparing a newly obtained print with one stored in the file in previous step. This is helpful
+when fingerprint templates are stored centrally (not on sensor's flash memory) and shared
+between multiple sensors.
+
+* Author(s): admiralmaggie
+
+Implementation Notes
+--------------------
+
+**Hardware:**
+
+* `Fingerprint sensor <https://www.adafruit.com/product/751>`_ (Product ID: 751)
+* `Panel Mount Fingerprint sensor <https://www.adafruit.com/product/4651>`_ (Product ID: 4651)
+"""
+
+
 import serial
 import adafruit_fingerprint
 
@@ -9,7 +30,7 @@ import adafruit_fingerprint
 # uart = busio.UART(board.TX, board.RX, baudrate=57600)
 
 # If using with a computer such as Linux/RaspberryPi, Mac, Windows with USB/serial converter:
-uart = serial.Serial("COM4", baudrate=57600, timeout=1)
+uart = serial.Serial("COM6", baudrate=57600, timeout=1)
 
 # If using with Linux/Raspberry Pi and hardware UART:
 # uart = serial.Serial("/dev/ttyS0", baudrate=57600, timeout=1)
@@ -33,7 +54,7 @@ def sensor_reset():
 # pylint: disable=too-many-branches
 def fingerprint_check_file():
     """Compares a new fingerprint template to an existing template stored in a file
-       This is useful when templates are stored centrally (i.e. in a database)"""
+    This is useful when templates are stored centrally (i.e. in a database)"""
     print("Waiting for finger print...")
     set_led_local(color=3, mode=1)
     while finger.get_image() != adafruit_fingerprint.OK:
@@ -43,8 +64,8 @@ def fingerprint_check_file():
         return False
 
     print("Loading file template...", end="", flush=True)
-    with open('template0.dat', 'rb') as f:
-        data = f.read()
+    with open("template0.dat", "rb") as file:
+        data = file.read()
     finger.send_fpdata(list(data), "char", 2)
 
     i = finger.compare_templates()
@@ -125,20 +146,21 @@ def enroll_save_to_file():
 
     print("Downloading template...")
     data = finger.get_fpdata("char", 1)
-    with open("template0.dat", "wb") as f:
-        f.write(bytearray(data))
+    with open("template0.dat", "wb") as file:
+        file.write(bytearray(data))
     set_led_local(color=2, speed=150, mode=6)
     print("Template is saved in template0.dat file.")
 
     return True
 
+
 def set_led_local(color=1, mode=3, speed=0x80, cycles=0):
     """this is to make sure LED doesn't interfer with example
-       running on models without LED support - needs testing"""
+    running on models without LED support - needs testing"""
     try:
         finger.set_led(color, mode, speed, cycles)
-    except:
-        pass
+    except Exception as exc:
+        print("INFO: Sensor les not support LED!")
 
 
 set_led_local(color=3, mode=2, speed=10, cycles=10)
@@ -164,7 +186,7 @@ while True:
     print("----------------")
     c = input("> ")
 
-    if c == "x" or c == "q":
+    if c in ("x", "q"):
         print("Exiting fingerprint example program")
         # turn off LED
         set_led_local(mode=4)

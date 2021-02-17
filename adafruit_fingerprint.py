@@ -208,7 +208,7 @@ class Adafruit_Fingerprint:
     def get_fpdata(self, sensorbuffer="char", slot=1):
         """Requests the sensor to transfer the fingerprint image or
         template.  Returns the data payload only."""
-        if slot != 1 and slot != 2:
+        if slot not in (1, 2):
             # raise error or use default value?
             slot = 2
         if sensorbuffer == "image":
@@ -219,14 +219,14 @@ class Adafruit_Fingerprint:
             raise RuntimeError("Uknown sensor buffer type")
         if self._get_packet(12)[0] == 0:
             res = self._get_data(9)
-            self._print_debug("get_fpdata data size:",  str(len(res)))
+            self._print_debug("get_fpdata data size:", str(len(res)))
         self._print_debug("get_fdata res:", res, data_type="hex")
         return res
 
     def send_fpdata(self, data, sensorbuffer="char", slot=1):
         """Requests the sensor to receive data, either a fingerprint image or
         a character/template data.  Data is the payload only."""
-        if slot != 1 and slot != 2:
+        if slot not in (1, 2):
             # raise error or use default value?
             slot = 2
         if sensorbuffer == "image":
@@ -294,7 +294,6 @@ class Adafruit_Fingerprint:
     def close_uart(self):
         """close serial port"""
         self._uart.close()
-        return
 
     def finger_search(self):
         """Asks the sensor to search for a matching fingerprint starting at
@@ -314,7 +313,7 @@ class Adafruit_Fingerprint:
         """Compares two fingerprint templates in char buffers 1 and 2. Stores the confidence score
         in self.finger_id and self.confidence. Returns the packet error code or
         OK success"""
-        self._send_packet( [_COMPARE] )
+        self._send_packet([_COMPARE])
         r = self._get_packet(14)
         self.confidence = struct.unpack(">H", bytes(r[1:3]))
         self._print_debug("compare_templates confidence:", self.confidence)
@@ -437,7 +436,7 @@ class Adafruit_Fingerprint:
     def _send_data(self, data):
         self._print_debug("_send_data length:", len(data))
         self._print_debug("_send_data data:", data, data_type="hex")
-        #self.read_sysparam() #moved this to init
+        # self.read_sysparam() #moved this to init
         if self.data_packet_size == 0:
             data_length = 32
         elif self.data_packet_size == 1:
@@ -471,7 +470,7 @@ class Adafruit_Fingerprint:
             packet.append(length & 0xFF)
             checksum = _DATAPACKET + (length >> 8) + (length & 0xFF)
 
-            #for j in range(len(data[start:end])):
+            # for j in range(len(data[start:end])):
             for j in range(start, end):
                 packet.append(data[j])
                 checksum += data[j]
@@ -491,7 +490,7 @@ class Adafruit_Fingerprint:
 
     def _print_debug(self, info, data, data_type="str"):
         """Prints debugging information. This is activated
-           by flag _debug"""
+        by flag _debug"""
         if not self._debug:
             return
 
@@ -499,4 +498,3 @@ class Adafruit_Fingerprint:
             print("*** DEBUG ==>", info, ["{:02x}".format(i) for i in data])
         elif data_type == "str":
             print("*** DEBUG ==>", info, data)
-
