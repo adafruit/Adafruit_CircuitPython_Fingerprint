@@ -73,15 +73,14 @@ def fingerprint_check_file():
         set_led_local(color=2, speed=150, mode=6)
         print("Fingerprint match template in file.")
         return True
+    if i == adafruit_fingerprint.NOMATCH:
+        set_led_local(color=1, mode=2, speed=20, cycles=10)
+        print("Templates do not match!")
     else:
-        if i == adafruit_fingerprint.NOMATCH:
-            set_led_local(color=1, mode=2, speed=20, cycles=10)
-            print("Templates do not match!")
-        else:
-            print("Other error!")
-        return False
+        print("Other error!")
+    return False
 
-
+# pylint: disable=too-many-statements
 def enroll_save_to_file():
     """Take a 2 finger images and template it, then store it in a file"""
     set_led_local(color=3, mode=1)
@@ -153,14 +152,14 @@ def enroll_save_to_file():
 
     return True
 
-
+# pylint: disable=broad-except
 def set_led_local(color=1, mode=3, speed=0x80, cycles=0):
     """this is to make sure LED doesn't interfer with example
     running on models without LED support - needs testing"""
     try:
         finger.set_led(color, mode, speed, cycles)
     except Exception as exc:
-        print("INFO: Sensor les not support LED!")
+        print("INFO: Sensor les not support LED. Error:", str(exc))
 
 
 set_led_local(color=3, mode=2, speed=10, cycles=10)
@@ -191,7 +190,7 @@ while True:
         # turn off LED
         set_led_local(mode=4)
         raise SystemExit
-    elif c == "e":
+    if c == "e":
         enroll_save_to_file()
     elif c == "c":
         fingerprint_check_file()
