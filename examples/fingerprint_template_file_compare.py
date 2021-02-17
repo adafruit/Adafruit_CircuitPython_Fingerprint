@@ -80,6 +80,7 @@ def fingerprint_check_file():
         print("Other error!")
     return False
 
+
 # pylint: disable=too-many-statements
 def enroll_save_to_file():
     """Take a 2 finger images and template it, then store it in a file"""
@@ -151,6 +152,7 @@ def enroll_save_to_file():
     print("Template is saved in template0.dat file.")
 
     return True
+
 
 # pylint: disable=broad-except
 def set_led_local(color=1, mode=3, speed=0x80, cycles=0):
