@@ -57,6 +57,11 @@ Usage Example
 See 'examples' folder for full usage demo!
 
 
+Documentation
+=============
+
+API documentation for this library can be found on `Read the Docs <https://circuitpython.readthedocs.io/projects/fingerprint/en/latest/>`_.
+
 Contributing
 ============
 
