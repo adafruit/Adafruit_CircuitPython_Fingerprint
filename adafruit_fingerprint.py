@@ -226,7 +226,9 @@ class Adafruit_Fingerprint:
         self._print_debug("get_fdata res:", res, data_type="hex")
         return res
 
-    def send_fpdata(self, data: List[int], sensorbuffer: str = "char", slot: int = 1) -> bool:
+    def send_fpdata(
+        self, data: List[int], sensorbuffer: str = "char", slot: int = 1
+    ) -> bool:
         """Requests the sensor to receive data, either a fingerprint image or
         a character/template data.  Data is the payload only."""
         if slot not in (1, 2):
@@ -322,7 +324,9 @@ class Adafruit_Fingerprint:
         self._print_debug("compare_templates confidence:", self.confidence)
         return r[0]
 
-    def set_led(self, color: int = 1, mode: int = 3, speed: int = 0x80, cycles: int = 0) -> int:
+    def set_led(
+        self, color: int = 1, mode: int = 3, speed: int = 0x80, cycles: int = 0
+    ) -> int:
         """LED function -- only for R503 Sensor.
         Parameters: See User Manual for full details
         color: 1=red, 2=blue, 3=purple
