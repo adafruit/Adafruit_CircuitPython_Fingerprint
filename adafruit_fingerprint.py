@@ -25,8 +25,6 @@ Implementation Notes
   https://github.com/adafruit/circuitpython/releases
 """
 
-# pylint: disable=consider-using-f-string
-
 from micropython import const
 
 try:
