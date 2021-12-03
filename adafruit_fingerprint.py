@@ -30,6 +30,10 @@ from micropython import const
 try:
     from typing import Tuple, List, Union
     from busio import UART
+except ImportError:
+    pass
+
+try:
     import struct
 except ImportError:
     import ustruct as struct
