@@ -28,7 +28,7 @@ try:
     from typing import Tuple, List, Union
 except ImportError:
     pass
-  
+
 import struct
 
 from micropython import const
