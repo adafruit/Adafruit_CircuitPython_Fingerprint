@@ -24,15 +24,15 @@ Implementation Notes
 * Adafruit CircuitPython firmware (2.2.0+) for the ESP8622 and M0-based boards:
   https://github.com/adafruit/circuitpython/releases
 """
-
-from micropython import const
-
 try:
     from typing import Tuple, List, Union
-    from busio import UART
-    import struct
 except ImportError:
-    import ustruct as struct
+    pass
+  
+import struct
+
+from micropython import const
+from busio import UART
 
 __version__ = "0.0.0-auto.0"
 __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_Fingerprint.git"
