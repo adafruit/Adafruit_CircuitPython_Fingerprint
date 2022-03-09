@@ -475,7 +475,10 @@ class Adafruit_Fingerprint:
             self._print_debug("_send_data length:", length)
             packet.append(length >> 8)
             packet.append(length & 0xFF)
-            checksum = _DATAPACKET + (length >> 8) + (length & 0xFF)
+            if left <= 0:
+                checksum = _ENDDATAPACKET + (length >> 8) + (length & 0xFF)
+            else:
+                checksum = _DATAPACKET + (length >> 8) + (length & 0xFF)
 
             # for j in range(len(data[start:end])):
             for j in range(start, end):
