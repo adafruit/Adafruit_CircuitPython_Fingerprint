@@ -34,7 +34,7 @@ import struct
 from micropython import const
 from busio import UART
 
-__version__ = "0.0.0-auto.0"
+__version__ = "0.0.0+auto.0"
 __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_Fingerprint.git"
 
 _STARTCODE = const(0xEF01)
