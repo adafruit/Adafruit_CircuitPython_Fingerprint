@@ -63,7 +63,7 @@ def fingerprint_check_file():
     if finger.image_2_tz(1) != adafruit_fingerprint.OK:
         return False
 
-    print("Loading file template...", end="", flush=True)
+    print("Loading file template...", end="")
     with open("template0.dat", "rb") as file:
         data = file.read()
     finger.send_fpdata(list(data), "char", 2)
@@ -87,9 +87,9 @@ def enroll_save_to_file():
     set_led_local(color=3, mode=1)
     for fingerimg in range(1, 3):
         if fingerimg == 1:
-            print("Place finger on sensor...", end="", flush=True)
+            print("Place finger on sensor...", end="")
         else:
-            print("Place same finger again...", end="", flush=True)
+            print("Place same finger again...", end="")
 
         while True:
             i = finger.get_image()
@@ -97,7 +97,7 @@ def enroll_save_to_file():
                 print("Image taken")
                 break
             if i == adafruit_fingerprint.NOFINGER:
-                print(".", end="", flush=True)
+                print(".", end="")
             elif i == adafruit_fingerprint.IMAGEFAIL:
                 set_led_local(color=1, mode=2, speed=20, cycles=10)
                 print("Imaging error")
@@ -107,7 +107,7 @@ def enroll_save_to_file():
                 print("Other error")
                 return False
 
-        print("Templating...", end="", flush=True)
+        print("Templating...", end="")
         i = finger.image_2_tz(fingerimg)
         if i == adafruit_fingerprint.OK:
             print("Templated")
@@ -131,7 +131,7 @@ def enroll_save_to_file():
             while i != adafruit_fingerprint.NOFINGER:
                 i = finger.get_image()
 
-    print("Creating model...", end="", flush=True)
+    print("Creating model...", end="")
     i = finger.create_model()
     if i == adafruit_fingerprint.OK:
         print("Created")
