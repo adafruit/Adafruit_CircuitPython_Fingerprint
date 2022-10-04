@@ -39,7 +39,7 @@ def get_fingerprint():
 def get_fingerprint_detail():
     """Get a finger print image, template it, and see if it matches!
     This time, print out each error instead of just returning on failure"""
-    print("Getting image...", end="", flush=True)
+    print("Getting image...", end="")
     i = finger.get_image()
     if i == adafruit_fingerprint.OK:
         print("Image taken")
@@ -52,7 +52,7 @@ def get_fingerprint_detail():
             print("Other error")
         return False
 
-    print("Templating...", end="", flush=True)
+    print("Templating...", end="")
     i = finger.image_2_tz(1)
     if i == adafruit_fingerprint.OK:
         print("Templated")
@@ -67,7 +67,7 @@ def get_fingerprint_detail():
             print("Other error")
         return False
 
-    print("Searching...", end="", flush=True)
+    print("Searching...", end="")
     i = finger.finger_fast_search()
     # pylint: disable=no-else-return
     # This block needs to be refactored when it can be tested.
@@ -87,9 +87,9 @@ def enroll_finger(location):
     """Take a 2 finger images and template it, then store in 'location'"""
     for fingerimg in range(1, 3):
         if fingerimg == 1:
-            print("Place finger on sensor...", end="", flush=True)
+            print("Place finger on sensor...", end="")
         else:
-            print("Place same finger again...", end="", flush=True)
+            print("Place same finger again...", end="")
 
         while True:
             i = finger.get_image()
@@ -97,7 +97,7 @@ def enroll_finger(location):
                 print("Image taken")
                 break
             if i == adafruit_fingerprint.NOFINGER:
-                print(".", end="", flush=True)
+                print(".", end="")
             elif i == adafruit_fingerprint.IMAGEFAIL:
                 print("Imaging error")
                 return False
@@ -105,7 +105,7 @@ def enroll_finger(location):
                 print("Other error")
                 return False
 
-        print("Templating...", end="", flush=True)
+        print("Templating...", end="")
         i = finger.image_2_tz(fingerimg)
         if i == adafruit_fingerprint.OK:
             print("Templated")
@@ -126,7 +126,7 @@ def enroll_finger(location):
             while i != adafruit_fingerprint.NOFINGER:
                 i = finger.get_image()
 
-    print("Creating model...", end="", flush=True)
+    print("Creating model...", end="")
     i = finger.create_model()
     if i == adafruit_fingerprint.OK:
         print("Created")
@@ -137,7 +137,7 @@ def enroll_finger(location):
             print("Other error")
         return False
 
-    print("Storing model #%d..." % location, end="", flush=True)
+    print("Storing model #%d..." % location, end="")
     i = finger.store_model(location)
     if i == adafruit_fingerprint.OK:
         print("Stored")
