@@ -5,9 +5,9 @@ import time
 import board
 import busio
 from digitalio import DigitalInOut, Direction
-import adafruit_fingerprint
 import numpy as np
 from matplotlib import pyplot as plt
+import adafruit_fingerprint
 
 led = DigitalInOut(board.D13)
 led.direction = Direction.OUTPUT
