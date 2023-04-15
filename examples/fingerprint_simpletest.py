@@ -6,6 +6,8 @@ import board
 import busio
 from digitalio import DigitalInOut, Direction
 import adafruit_fingerprint
+import numpy as np
+from matplotlib import pyplot as plt
 
 led = DigitalInOut(board.D13)
 led.direction = Direction.OUTPUT
@@ -85,6 +87,44 @@ def get_fingerprint_detail():
             print("Other error")
         return False
 
+def get_fingerprint_photo():
+    """Get and show fingerprint image"""
+    print("Waiting for image...")
+    while finger.get_image() != adafruit_fingerprint.OK:
+        pass
+    print("Got image...Transferring image data...")
+    imgList = finger.get_fpdata('image', 2)
+    imgArray = np.zeros(73728,np.uint8) 
+    for i, val in enumerate(imgList):
+        imgArray[(i * 2)] = (val & 240)
+        imgArray[(i * 2) + 1] = (val & 15) * 16
+    imgArray = np.reshape(imgArray, (288, 256))
+    plt.title("Fingerprint Image")
+    plt.imshow(imgArray)
+    plt.show()
+    
+def get_fingerprint_preview():
+    """Get a finger print image, show it, template it, and see if it matches!"""
+    print("Waiting for image...")
+    while finger.get_image() != adafruit_fingerprint.OK:
+        pass
+    print("Got image...Transferring image data...")
+    imgList = finger.get_fpdata('image', 2)
+    imgArray = np.zeros(73728,np.uint8) 
+    for i, val in enumerate(imgList):
+        imgArray[(i * 2)] = (val & 240)
+        imgArray[(i * 2) + 1] = (val & 15) * 16
+    imgArray = np.reshape(imgArray, (288, 256))
+    plt.title("Fingerprint Image")
+    plt.imshow(imgArray)
+    plt.show()
+    print("Templating...")
+    if finger.image_2_tz(1) != adafruit_fingerprint.OK:
+        return False
+    print("Searching...")
+    if finger.finger_search() != adafruit_fingerprint.OK:
+        return False
+    return True        
 
 # pylint: disable=too-many-statements
 def enroll_finger(location):
@@ -194,3 +234,11 @@ while True:
             print("Deleted!")
         else:
             print("Failed to delete")
+    if c == "v":
+        get_fingerprint_photo()
+    if c == "p":
+        if get_fingerprint_preview():
+            print("Detected #", finger.finger_id, "with confidence", finger.confidence)
+        else:
+            print("Finger not found")            
+
