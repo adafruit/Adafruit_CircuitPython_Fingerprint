@@ -1,14 +1,16 @@
 # SPDX-FileCopyrightText: 2021 ladyada for Adafruit Industries
 # SPDX-License-Identifier: MIT
 
+# Added 'View Print' and 'Preview and Find Print' functions to 
+# example code fingerprint_simpletest.py
+
 import time
-import board
-import busio
-from digitalio import DigitalInOut, Direction
-import adafruit_fingerprint
+# import board
+# import busio
+# from digitalio import DigitalInOut, Direction
 import numpy as np
 from matplotlib import pyplot as plt
-
+import adafruit_fingerprint
 
 #led = DigitalInOut(board.D13)
 #led.direction = Direction.OUTPUT
@@ -17,6 +19,7 @@ from matplotlib import pyplot as plt
 #uart = busio.UART(board.TX, board.RX, baudrate=57600)
 
 # If using with a computer such as Linux/RaspberryPi, Mac, Windows with USB/serial converter:
+# Edit ttyACM0 to your USB/serial port
 import serial
 uart = serial.Serial("/dev/ttyACM0", baudrate=57600, timeout=1)
 
@@ -103,7 +106,7 @@ def get_fingerprint_photo():
     imgArray = np.reshape(imgArray, (288, 256))
     plt.title("Fingerprint Image")
     plt.imshow(imgArray)
-    plt.show()
+    plt.show(block = False)
     
 def get_fingerprint_preview():
     """Get a finger print image, show it, template it, and see if it matches!"""
@@ -119,7 +122,7 @@ def get_fingerprint_preview():
     imgArray = np.reshape(imgArray, (288, 256))
     plt.title("Fingerprint Image")
     plt.imshow(imgArray)
-    plt.show()
+    plt.show(block = False)
     print("Templating...")
     if finger.image_2_tz(1) != adafruit_fingerprint.OK:
         return False
