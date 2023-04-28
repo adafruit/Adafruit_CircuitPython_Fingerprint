@@ -1,10 +1,11 @@
 # SPDX-FileCopyrightText: 2021 ladyada for Adafruit Industries
 # SPDX-License-Identifier: MIT
 
-# Added 'View Print' and 'Preview and Find Print' functions to 
+# Added 'View Print' and 'Preview and Find Print' functions to
 # example code fingerprint_simpletest.py
 
 import time
+
 # import board
 # import busio
 # from digitalio import DigitalInOut, Direction
@@ -13,11 +14,11 @@ from matplotlib import pyplot as plt
 import serial
 import adafruit_fingerprint
 
-#led = DigitalInOut(board.D13)
-#led.direction = Direction.OUTPUT
+# led = DigitalInOut(board.D13)
+# led.direction = Direction.OUTPUT
 
 # This has not been tested:
-#uart = busio.UART(board.TX, board.RX, baudrate=57600)
+# uart = busio.UART(board.TX, board.RX, baudrate=57600)
 
 # If using with a computer such as Linux/RaspberryPi, Mac, Windows with USB/serial converter:
 # Edit ttyACM0 to your USB/serial port
@@ -92,44 +93,47 @@ def get_fingerprint_detail():
             print("Other error")
         return False
 
+
 def get_fingerprint_photo():
     """Get and show fingerprint image"""
     print("Waiting for image...")
     while finger.get_image() != adafruit_fingerprint.OK:
         pass
     print("Got image...Transferring image data...")
-    imgList = finger.get_fpdata('image', 2)
-    imgArray = np.zeros(73728,np.uint8) 
+    imgList = finger.get_fpdata("image", 2)
+    imgArray = np.zeros(73728, np.uint8)
     for i, val in enumerate(imgList):
-        imgArray[(i * 2)] = (val & 240)
+        imgArray[(i * 2)] = val & 240
         imgArray[(i * 2) + 1] = (val & 15) * 16
     imgArray = np.reshape(imgArray, (288, 256))
     plt.title("Fingerprint Image")
     plt.imshow(imgArray)
-    plt.show(block = False)
-    
+    plt.show(block=False)
+
+
 def get_fingerprint_preview():
     """Get a finger print image, show it, template it, and see if it matches!"""
     print("Waiting for image...")
     while finger.get_image() != adafruit_fingerprint.OK:
         pass
     print("Got image...Transferring image data...")
-    imgList = finger.get_fpdata('image', 2)
-    imgArray = np.zeros(73728,np.uint8) 
+    imgList = finger.get_fpdata("image", 2)
+    imgArray = np.zeros(73728, np.uint8)
     for i, val in enumerate(imgList):
-        imgArray[(i * 2)] = (val & 240)
+        imgArray[(i * 2)] = val & 240
         imgArray[(i * 2) + 1] = (val & 15) * 16
     imgArray = np.reshape(imgArray, (288, 256))
     plt.title("Fingerprint Image")
     plt.imshow(imgArray)
-    plt.show(block = False)
+    plt.show(block=False)
     print("Templating...")
     if finger.image_2_tz(1) != adafruit_fingerprint.OK:
         return False
     print("Searching...")
     if finger.finger_search() != adafruit_fingerprint.OK:
         return False
-    return True    
+    return True
+
 
 # pylint: disable=too-many-statements
 def enroll_finger(location):
@@ -247,4 +251,4 @@ while True:
         if get_fingerprint_preview():
             print("Detected #", finger.finger_id, "with confidence", finger.confidence)
         else:
-            print("Finger not found")            
+            print("Finger not found")
