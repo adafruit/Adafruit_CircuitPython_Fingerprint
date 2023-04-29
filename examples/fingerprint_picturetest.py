@@ -2,9 +2,6 @@
 # SPDX-License-Identifier: MIT
 
 import time
-# import board
-# import busio
-# from digitalio import DigitalInOut, Direction
 import numpy as np
 from matplotlib import pyplot as plt
 import serial
