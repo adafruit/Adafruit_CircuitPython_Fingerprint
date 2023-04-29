@@ -1,8 +1,7 @@
-# SPDX-FileCopyrightText: 2021 ladyada for Adafruit Industries
+# SPDX-FileCopyrightText: 2023 Jim McKeown
 # SPDX-License-Identifier: MIT
 
-# Added 'View Print' and 'Preview and Find Print' functions to
-# example code fingerprint_simpletest.py
+"""Added 'View Print' and 'Preview and Find Print' to fingerprint_simpletest.py"""
 
 import time
 
