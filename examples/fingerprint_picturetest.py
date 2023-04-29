@@ -1,10 +1,7 @@
 # SPDX-FileCopyrightText: 2023 Jim McKeown
 # SPDX-License-Identifier: MIT
 
-"""Added 'View Print' and 'Preview and Find Print' to fingerprint_simpletest.py"""
-"""This example only works on single board computers with the use of Blinka"""
 import time
-
 # import board
 # import busio
 # from digitalio import DigitalInOut, Direction
@@ -12,6 +9,9 @@ import numpy as np
 from matplotlib import pyplot as plt
 import serial
 import adafruit_fingerprint
+
+"""Added 'View Print' and 'Preview and Find Print' to fingerprint_simpletest.py"""
+"""This example only works on single board computers with the use of Blinka"""
 
 # led = DigitalInOut(board.D13)
 # led.direction = Direction.OUTPUT
