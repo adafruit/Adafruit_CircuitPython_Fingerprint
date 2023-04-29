@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: MIT
 
 """Added 'View Print' and 'Preview and Find Print' to fingerprint_simpletest.py"""
-
+"""This example only works on single board computers with the use of Blinka"""
 import time
 
 # import board
