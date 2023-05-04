@@ -4,4 +4,4 @@
 
 numpy
 matplotlib
-serial
+pyserial
