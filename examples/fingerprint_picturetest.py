@@ -1,14 +1,27 @@
 # SPDX-FileCopyrightText: 2023 Jim McKeown
 # SPDX-License-Identifier: MIT
 
+"""
+This example shows the basic functionality to:
+Show the devices fingerprint slots that have fingerprints enrolled.
+Enroll a fingerprint in an existing or new fingerprint slot.
+Try to find a fingerprint in the existing list of enrolled fingerprints.
+Delete an enrolled fingerprint.
+View the image of a fingerprint.
+Preview the image of a fingerprint and then try to find the fingerprint
+in the existing list of enrolled fingerprints.
+
+Please note that this example only works on single board computers
+with the use of Blinka.
+
+This example is based on fingerprint_simpletest.py
+"""
+
 import time
 import numpy as np
 from matplotlib import pyplot as plt
 import serial
 import adafruit_fingerprint
-
-"""Added 'View Print' and 'Preview and Find Print' to fingerprint_simpletest.py"""
-"""This example only works on single board computers with the use of Blinka"""
 
 # led = DigitalInOut(board.D13)
 # led.direction = Direction.OUTPUT
