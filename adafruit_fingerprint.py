@@ -91,6 +91,7 @@ ADDRCODE = const(0x20)
 PASSVERIFY = const(0x21)
 MODULEOK = const(0x55)
 
+
 # pylint: disable=too-many-instance-attributes
 # pylint: disable=too-many-public-methods
 class Adafruit_Fingerprint:
