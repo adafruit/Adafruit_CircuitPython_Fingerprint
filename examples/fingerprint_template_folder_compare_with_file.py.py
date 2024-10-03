@@ -13,13 +13,15 @@ between multiple sensors.
 
 Implementation Notes
 --------------------
-This program was used on others sensor of fingerprint generics and everything turned out to be as expected,
+This program was used on others sensor of fingerprint,
+generics and everything turned out to be as expected,
 so this program was tested with Raspsberry Pi Zero 2"
 
 """
+import os
 import time
 from PIL import Image
-import os
+
 
 ##################### Settings of serial port
 
@@ -89,9 +91,7 @@ def get_fingerprint_detail():
     if i == adafruit_fingerprint.OK:
         print("¡Fingerprint found!")
         return True
-    else:
-        print("Fingerprint not found")
-        return False
+    return False
 
 def enroll_finger(location):
     """Enroll a finger with the fingerprint sensor and store it in the given location specific."""
@@ -289,6 +289,7 @@ while True:
         else:
             print("Fingerprint not found")
     if c == "d":
+        """"get_num is a function that returns a number from 0 to 127"""
         if finger.delete_model(get_num(finger.library_size)) == adafruit_fingerprint.OK:
             print("¡Deleted!")
         else:
