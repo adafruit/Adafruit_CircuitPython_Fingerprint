@@ -41,6 +41,7 @@ finger = adafruit_fingerprint.Adafruit_Fingerprint(uart)
 # Folder where fingerprint templates are stored
 FINGERPRINT_FOLDER = "fingerprint/"
 
+
 # Enroll and verification functions
 def get_num(max_num):
     """Prompts the user to enter a valid template number within the available range."""
@@ -164,10 +165,7 @@ def enroll_save_to_file():
 
     print("Storing template...")
     data = finger.get_fpdata("char", 1)
-    filename = os.path.join(
-        FINGERPRINT_FOLDER,
-        f"template_{int(time.time())}.dat"
-        )
+    filename = os.path.join(FINGERPRINT_FOLDER, f"template_{int(time.time())}.dat")
     with open(filename, "wb") as file:
         file.write(bytearray(data))
     print(f"Template saved to {filename}")
@@ -266,8 +264,8 @@ def main():
 def print_fingerprint():
     """Prints the fingerprint detection result."""
     if get_fingerprint():
-        output_finger_detected=f"Fingerprint detected with ID #{finger.finger_id}"
-        output_finger_confidence=f"Confidence: {finger.confidence}"
+        output_finger_detected = f"Fingerprint detected with ID #{finger.finger_id}"
+        output_finger_confidence = f"Confidence: {finger.confidence}"
         print(output_finger_detected)
         print(output_finger_confidence)
     else:
