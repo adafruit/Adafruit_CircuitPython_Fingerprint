@@ -107,18 +107,18 @@ def save_fingerprint_image(filename):
     pixeldata = img.load()
     mask = 0b00001111
     result = finger.get_fpdata(sensorbuffer="image")
-    x, y = 0, 0
+    coor_x, coor_y = 0, 0
     for i, value in enumerate(result):
         if i % 100 == 0:
             print("", end="")
-        pixeldata[x, y] = (int(value) >> 4) * 17
-        x += 1
-        pixeldata[x, y] = (int(value) & mask) * 17
-        if x == 255:
-            x = 0
-            y += 1
+        pixeldata[coor_x, coor_y] = (int(value) >> 4) * 17
+        coor_x += 1
+        pixeldata[coor_x, coor_y] = (int(value) & mask) * 17
+        if coor_x == 255:
+            coor_x = 0
+            coor_y += 1
         else:
-            x += 1
+            coor_x += 1
     img.save(filename)
     print(f"\nImage saved to {filename}")
     return True
@@ -214,8 +214,8 @@ def main():
         print("r) Reset library")
         print("q) Exit")
         print("----------------")
-        c = input("> ")
-        match c:
+        user_choice = input("> ")
+        match user_choice.lower():
             case "e":
                 enroll_finger(get_num(finger.library_size))
             case "f":
