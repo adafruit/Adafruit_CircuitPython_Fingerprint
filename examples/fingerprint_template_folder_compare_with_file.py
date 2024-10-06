@@ -209,17 +209,6 @@ def main():
     It interacts with the user via the console and performs the necessary actions based on
     user input.
     """
-    actions = {
-        "e": lambda: enroll_finger(get_num(finger.library_size)),
-        "f": lambda: print_fingerprint(),
-        "d": lambda: delete_fingerprint(),
-        "s": lambda: save_fingerprint_image(f"fingerprint_{int(time.time())}.png"),
-        "cf": lambda: fingerprint_check_folder(),
-        "esf": lambda: enroll_save_to_file(),
-        "r": lambda: reset_library(),
-        "q": lambda: exit_program()
-    }
-
     while True:
         print("----------------")
         if finger.read_templates() != adafruit_fingerprint.OK:
@@ -235,16 +224,38 @@ def main():
         print("Template library size: ", finger.library_size)
 
         print("Options:")
-        for option in actions.keys():
-            print(f"{option}) {option_description(option)}")
+        print("e) Enroll fingerprint")
+        print("f) Search fingerprint")
+        print("d) Delete fingerprint")
+        print("s) Save fingerprint image")
+        print("cf) Compare template with file")
+        print("esf) Enroll and save to file")
+        print("r) Reset library")
+        print("q) Exit")
         print("----------------")
 
         c = input("> ")
 
-        if c in actions:
-            actions[c]()
-        else:
-            print("Invalid option.")
+        match c:
+            case "e":
+                enroll_finger(get_num(finger.library_size))
+            case "f":
+                print_fingerprint()
+            case "d":
+                delete_fingerprint()
+            case "s":
+                save_fingerprint_image(f"fingerprint_{int(time.time())}.png")
+            case "cf":
+                fingerprint_check_folder()
+            case "esf":
+                enroll_save_to_file()
+            case "r":
+                reset_library()
+            case "q":
+                exit_program()
+            case _:
+                print("Invalid option.")
+
 
 def print_fingerprint():
     """Prints the fingerprint detection result."""
@@ -268,25 +279,11 @@ def reset_library():
         print("Library reset.")
     else:
         print("Failed to reset library.")
-        
 def exit_program():
     """Exits the program."""
     print("Exiting...")
     sys.exit(0)
 
-def option_description(option):
-    """Returns a description for each menu option."""
-    descriptions = {
-        "e": "Enroll fingerprint",
-        "f": "Search fingerprint",
-        "d": "Delete fingerprint",
-        "s": "Save fingerprint image",
-        "cf": "Compare template with file",
-        "esf": "Enroll and save to file",
-        "r": "Reset library",
-        "q": "Exit"
-    }
-    return descriptions.get(option, "No description available.")
 
 if __name__ == "__main__":
     main()
