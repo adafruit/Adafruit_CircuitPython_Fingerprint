@@ -53,6 +53,7 @@ def get_num(max_num):
         except ValueError:
             print("Invalid input. Please enter a valid number.")
 
+
 def get_fingerprint():
     """Get an image from the fingerprint sensor for search, process for a match."""
     print("Waiting for finger...")
@@ -66,6 +67,7 @@ def get_fingerprint():
 
     print("Searching for matches...")
     return finger.finger_search() == adafruit_fingerprint.OK
+
 
 def enroll_finger(location):
     """Enroll a fingerprint and store it in the specified location."""
@@ -102,6 +104,7 @@ def enroll_finger(location):
 
     print("Model stored.")
     return True
+
 
 def save_fingerprint_image(filename):
     """Capture a fingerprint and save the image to a file."""
@@ -161,12 +164,16 @@ def enroll_save_to_file():
 
     print("Storing template...")
     data = finger.get_fpdata("char", 1)
-    filename = os.path.join(FINGERPRINT_FOLDER, f"template_{int(time.time())}.dat")
+    filename = os.path.join(
+        FINGERPRINT_FOLDER,
+        f"template_{int(time.time())}.dat"
+        )
     with open(filename, "wb") as file:
         file.write(bytearray(data))
     print(f"Template saved to {filename}")
 
     return True
+
 
 def fingerprint_check_folder():
     """Compare a fingerprint with all files in the fingerprint folder."""
@@ -201,6 +208,7 @@ def fingerprint_check_folder():
 
     return found_match
 
+
 def main():
     """Main function to run the fingerprint enrollment and verification program.
 
@@ -233,9 +241,7 @@ def main():
         print("r) Reset library")
         print("q) Exit")
         print("----------------")
-
         c = input("> ")
-
         match c:
             case "e":
                 enroll_finger(get_num(finger.library_size))
@@ -267,18 +273,23 @@ def print_fingerprint():
     else:
         print("Fingerprint not found.")
 
+
 def delete_fingerprint():
     """Deletes a fingerprint model based on user input."""
     if finger.delete_model(get_num(finger.library_size)) == adafruit_fingerprint.OK:
         print("Deleted successfully!")
     else:
         print("Failed to delete.")
+
+
 def reset_library():
     """Resets the fingerprint library."""
     if finger.empty_library() == adafruit_fingerprint.OK:
         print("Library reset.")
     else:
         print("Failed to reset library.")
+
+
 def exit_program():
     """Exits the program."""
     print("Exiting...")
