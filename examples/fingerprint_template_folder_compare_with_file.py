@@ -60,12 +60,10 @@ def get_fingerprint():
     print("Waiting for finger...")
     while finger.get_image() != adafruit_fingerprint.OK:
         pass
-
     print("Processing image...")
     if finger.image_2_tz(1) != adafruit_fingerprint.OK:
         print("Error processing image.")
         return False
-
     print("Searching for matches...")
     return finger.finger_search() == adafruit_fingerprint.OK
 
@@ -75,34 +73,28 @@ def enroll_finger(location):
     for fingerimg in range(1, 3):
         action = "Place finger on sensor" if fingerimg == 1 else "Same finger again"
         print(action, end="")
-
         while True:
             if finger.get_image() == adafruit_fingerprint.OK:
                 print("Image captured")
                 break
             print(".", end="")
-
         print("Processing image...", end="")
         if finger.image_2_tz(fingerimg) != adafruit_fingerprint.OK:
             print("Error processing image.")
             return False
-
         if fingerimg == 1:
             print("Remove finger")
             time.sleep(1)
             while finger.get_image() != adafruit_fingerprint.NOFINGER:
                 pass
-
     print("Creating model...", end="")
     if finger.create_model() != adafruit_fingerprint.OK:
         print("Error creating model.")
         return False
-
     print(f"Storing model in location #{location}...", end="")
     if finger.store_model(location) != adafruit_fingerprint.OK:
         print("Error storing model.")
         return False
-
     print("Model stored.")
     return True
 
@@ -112,12 +104,10 @@ def save_fingerprint_image(filename):
     print("Waiting for finger...")
     while finger.get_image() != adafruit_fingerprint.OK:
         pass
-
     img = Image.new("L", (256, 288), "white")
     pixeldata = img.load()
     mask = 0b00001111
     result = finger.get_fpdata(sensorbuffer="image")
-
     x, y = 0, 0
     for i, value in enumerate(result):
         if i % 100 == 0:
@@ -130,7 +120,6 @@ def save_fingerprint_image(filename):
             y += 1
         else:
             x += 1
-
     img.save(filename)
     print(f"\nImage saved to {filename}")
     return True
@@ -141,35 +130,29 @@ def enroll_save_to_file():
     for fingerimg in range(1, 3):
         action = "Place finger on sensor" if fingerimg == 1 else "Same finger again"
         print(action, end="")
-
         while True:
             if finger.get_image() == adafruit_fingerprint.OK:
                 print("Image captured")
                 break
             print(".", end="")
-
         print("Processing image...", end="")
         if finger.image_2_tz(fingerimg) != adafruit_fingerprint.OK:
             print("Error processing image.")
             return False
-
         if fingerimg == 1:
             print("Remove finger")
             while finger.get_image() != adafruit_fingerprint.NOFINGER:
                 pass
-
     print("Creating model...", end="")
     if finger.create_model() != adafruit_fingerprint.OK:
         print("Error creating model.")
         return False
-
     print("Storing template...")
     data = finger.get_fpdata("char", 1)
     filename = os.path.join(FINGERPRINT_FOLDER, f"template_{int(time.time())}.dat")
     with open(filename, "wb") as file:
         file.write(bytearray(data))
     print(f"Template saved to {filename}")
-
     return True
 
 
@@ -178,16 +161,13 @@ def fingerprint_check_folder():
     print("Waiting for fingerprint...")
     while finger.get_image() != adafruit_fingerprint.OK:
         pass
-
     print("Processing image...")
     if finger.image_2_tz(1) != adafruit_fingerprint.OK:
         print("Error processing image.")
         return False
-
     print("Searching for matches in the template folder...", end="")
     found_match = False
     matched_filename = None
-
     for filename in os.listdir(FINGERPRINT_FOLDER):
         if filename.endswith(".dat"):
             file_path = os.path.join(FINGERPRINT_FOLDER, filename)
@@ -198,18 +178,15 @@ def fingerprint_check_folder():
                 matched_filename = filename
                 found_match = True
                 break
-
     if found_match:
         print(f"Fingerprint matches the template in the file {matched_filename}!")
     else:
         print("No match found.")
-
     return found_match
 
 
 def main():
     """Main function to run the fingerprint enrollment and verification program.
-
     This function provides a menu for the user to enroll fingerprints, search for
     fingerprints, delete templates, save fingerprint images, and reset the fingerprint library.
     It interacts with the user via the console and performs the necessary actions based on
@@ -228,7 +205,6 @@ def main():
         if finger.read_sysparam() != adafruit_fingerprint.OK:
             raise RuntimeError("Could not retrieve system parameters.")
         print("Template library size: ", finger.library_size)
-
         print("Options:")
         print("e) Enroll fingerprint")
         print("f) Search fingerprint")
@@ -291,7 +267,7 @@ def reset_library():
 def exit_program():
     """Exits the program."""
     print("Exiting...")
-    sys.exit(0)
+    raise SystemExit
 
 
 if __name__ == "__main__":
