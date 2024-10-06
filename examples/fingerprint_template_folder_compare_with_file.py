@@ -23,12 +23,11 @@ To run the program:
 """
 
 import os
-import sys
 import time
 
-import adafruit_fingerprint
 import serial
 from PIL import Image
+import adafruit_fingerprint
 
 # If using with a computer such as Linux/RaspberryPi, Mac, Windows with USB/serial converter:
 # uart = serial.Serial("COM6", baudrate=57600, timeout=1)
