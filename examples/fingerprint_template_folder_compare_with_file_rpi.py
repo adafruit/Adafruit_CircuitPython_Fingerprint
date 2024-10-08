@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2021 ladyada for Adafruit Industries
+# SPDX-FileCopyrightText: 2024 itsFDavid
 # SPDX-License-Identifier: MIT
 """
 `fingerprint_template_folder_compare_with_file.py`
