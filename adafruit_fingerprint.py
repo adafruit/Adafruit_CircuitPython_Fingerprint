@@ -30,6 +30,7 @@ except ImportError:
     pass
 
 import struct
+import time
 
 from micropython import const
 from busio import UART
@@ -171,6 +172,7 @@ class Adafruit_Fingerprint:
             self.security_level = param_val
         elif param_num == 6:
             self.data_packet_size = param_val
+        time.sleep(0.25)
         return r[0]
 
     def get_image(self) -> int:
