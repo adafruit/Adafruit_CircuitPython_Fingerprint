@@ -38,7 +38,6 @@ def get_fingerprint():
     return True
 
 
-# pylint: disable=too-many-branches
 def get_fingerprint_detail():
     """Get a finger print image, template it, and see if it matches!
     This time, print out each error instead of just returning on failure"""
@@ -72,7 +71,6 @@ def get_fingerprint_detail():
 
     print("Searching...", end="")
     i = finger.finger_fast_search()
-    # pylint: disable=no-else-return
     # This block needs to be refactored when it can be tested.
     if i == adafruit_fingerprint.OK:
         print("Found fingerprint!")
@@ -85,7 +83,6 @@ def get_fingerprint_detail():
         return False
 
 
-# pylint: disable=too-many-statements
 def enroll_finger(location):
     """Take a 2 finger images and template it, then store in 'location'"""
     for fingerimg in range(1, 3):
@@ -173,11 +170,8 @@ def save_fingerprint_image(filename):
     #   module then copies the image data to the image placeholder "img"
     #   pixel by pixel.  please refer to section 4.2.1 of the manual for
     #   more details.  thanks to Bastian Raschke and Danylo Esterman.
-    # pylint: disable=invalid-name
     x = 0
-    # pylint: disable=invalid-name
     y = 0
-    # pylint: disable=consider-using-enumerate
     for i in range(len(result)):
         pixeldata[x, y] = (int(result[i]) >> 4) * 17
         x += 1
