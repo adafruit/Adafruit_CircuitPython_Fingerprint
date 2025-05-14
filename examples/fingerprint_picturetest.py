@@ -18,9 +18,11 @@ This example is based on fingerprint_simpletest.py
 """
 
 import time
+
 import numpy as np
-from matplotlib import pyplot as plt
 import serial
+from matplotlib import pyplot as plt
+
 import adafruit_fingerprint
 
 # led = DigitalInOut(board.D13)
@@ -56,7 +58,6 @@ def get_fingerprint():
     return True
 
 
-# pylint: disable=too-many-branches
 def get_fingerprint_detail():
     """Get a finger print image, template it, and see if it matches!
     This time, print out each error instead of just returning on failure"""
@@ -90,7 +91,6 @@ def get_fingerprint_detail():
 
     print("Searching...", end="")
     i = finger.finger_fast_search()
-    # pylint: disable=no-else-return
     # This block needs to be refactored when it can be tested.
     if i == adafruit_fingerprint.OK:
         print("Found fingerprint!")
@@ -144,7 +144,6 @@ def get_fingerprint_preview():
     return True
 
 
-# pylint: disable=too-many-statements
 def enroll_finger(location):
     """Take a 2 finger images and template it, then store in 'location'"""
     for fingerimg in range(1, 3):

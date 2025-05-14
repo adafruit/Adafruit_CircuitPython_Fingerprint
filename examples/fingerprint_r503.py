@@ -2,8 +2,10 @@
 # SPDX-License-Identifier: MIT
 
 import time
+
 import board
 import busio
+
 import adafruit_fingerprint
 
 uart = busio.UART(board.TX, board.RX, baudrate=57600)
@@ -35,7 +37,6 @@ def get_fingerprint():
     return True
 
 
-# pylint: disable=too-many-branches
 def get_fingerprint_detail():
     """Get a finger print image, template it, and see if it matches!
     This time, print out each error instead of just returning on failure"""
@@ -69,7 +70,6 @@ def get_fingerprint_detail():
 
     print("Searching...", end="")
     i = finger.finger_fast_search()
-    # pylint: disable=no-else-return
     # This block needs to be refactored when it can be tested.
     if i == adafruit_fingerprint.OK:
         print("Found fingerprint!")
@@ -82,7 +82,6 @@ def get_fingerprint_detail():
         return False
 
 
-# pylint: disable=too-many-statements
 def enroll_finger(location):
     """Take a 2 finger images and template it, then store in 'location'"""
     for fingerimg in range(1, 3):
