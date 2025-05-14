@@ -27,6 +27,7 @@ import time
 
 import serial
 from PIL import Image
+
 import adafruit_fingerprint
 
 # If using with a computer such as Linux/RaspberryPi, Mac, Windows with USB/serial converter:

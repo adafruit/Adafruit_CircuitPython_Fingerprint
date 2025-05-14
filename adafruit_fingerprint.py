@@ -24,16 +24,17 @@ Implementation Notes
 * Adafruit CircuitPython firmware (2.2.0+) for the ESP8622 and M0-based boards:
   https://github.com/adafruit/circuitpython/releases
 """
+
 try:
-    from typing import Tuple, List, Union
+    from typing import List, Tuple, Union
 except ImportError:
     pass
 
 import struct
 import time
 
-from micropython import const
 from busio import UART
+from micropython import const
 
 __version__ = "0.0.0+auto.0"
 __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_Fingerprint.git"
@@ -93,8 +94,6 @@ PASSVERIFY = const(0x21)
 MODULEOK = const(0x55)
 
 
-# pylint: disable=too-many-instance-attributes
-# pylint: disable=too-many-public-methods
 class Adafruit_Fingerprint:
     """UART based fingerprint sensor."""
 
@@ -214,7 +213,7 @@ class Adafruit_Fingerprint:
     def get_fpdata(self, sensorbuffer: str = "char", slot: int = 1) -> List[int]:
         """Requests the sensor to transfer the fingerprint image or
         template.  Returns the data payload only."""
-        if slot not in (1, 2):
+        if slot not in {1, 2}:
             # raise error or use default value?
             slot = 2
         if sensorbuffer == "image":
@@ -229,12 +228,10 @@ class Adafruit_Fingerprint:
         self._print_debug("get_fdata res:", res, data_type="hex")
         return res
 
-    def send_fpdata(
-        self, data: List[int], sensorbuffer: str = "char", slot: int = 1
-    ) -> bool:
+    def send_fpdata(self, data: List[int], sensorbuffer: str = "char", slot: int = 1) -> bool:
         """Requests the sensor to receive data, either a fingerprint image or
         a character/template data.  Data is the payload only."""
-        if slot not in (1, 2):
+        if slot not in {1, 2}:
             # raise error or use default value?
             slot = 2
         if sensorbuffer == "image":
@@ -259,7 +256,7 @@ class Adafruit_Fingerprint:
         """Requests the sensor to list of all template locations in use and
         stores them in self.templates. Returns the packet error code or
         OK success"""
-        from math import ceil  # pylint: disable=import-outside-toplevel
+        from math import ceil  # noqa: PLC0415
 
         self.templates = []
         self.read_sysparam()
@@ -291,9 +288,7 @@ class Adafruit_Fingerprint:
         # or base the page on module's capacity
         self.read_sysparam()
         capacity = self.library_size
-        self._send_packet(
-            [_HISPEEDSEARCH, 0x01, 0x00, 0x00, capacity >> 8, capacity & 0xFF]
-        )
+        self._send_packet([_HISPEEDSEARCH, 0x01, 0x00, 0x00, capacity >> 8, capacity & 0xFF])
         r = self._get_packet(16)
         self.finger_id, self.confidence = struct.unpack(">HH", bytes(r[1:5]))
         self._print_debug("finger_fast_search packet:", r, data_type="hex")
@@ -309,9 +304,7 @@ class Adafruit_Fingerprint:
         and self.confidence. Returns the packet error code or OK success"""
         self.read_sysparam()
         capacity = self.library_size
-        self._send_packet(
-            [_FINGERPRINTSEARCH, 0x01, 0x00, 0x00, capacity >> 8, capacity & 0xFF]
-        )
+        self._send_packet([_FINGERPRINTSEARCH, 0x01, 0x00, 0x00, capacity >> 8, capacity & 0xFF])
         r = self._get_packet(16)
         self.finger_id, self.confidence = struct.unpack(">HH", bytes(r[1:5]))
         self._print_debug("finger_search packet:", r, data_type="hex")
@@ -327,9 +320,7 @@ class Adafruit_Fingerprint:
         self._print_debug("compare_templates confidence:", self.confidence)
         return r[0]
 
-    def set_led(
-        self, color: int = 1, mode: int = 3, speed: int = 0x80, cycles: int = 0
-    ) -> int:
+    def set_led(self, color: int = 1, mode: int = 3, speed: int = 0x80, cycles: int = 0) -> int:
         """LED function -- only for R503 Sensor.
         Parameters: See User Manual for full details
         color: 1=red, 2=blue, 3=purple
@@ -508,6 +499,6 @@ class Adafruit_Fingerprint:
             return
 
         if data_type == "hex":
-            print("*** DEBUG ==>", info, ["{:02x}".format(i) for i in data])
+            print("*** DEBUG ==>", info, [f"{i:02x}" for i in data])
         elif data_type == "str":
             print("*** DEBUG ==>", info, data)

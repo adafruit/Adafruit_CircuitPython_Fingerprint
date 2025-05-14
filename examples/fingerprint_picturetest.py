@@ -18,9 +18,11 @@ This example is based on fingerprint_simpletest.py
 """
 
 import time
+
 import numpy as np
-from matplotlib import pyplot as plt
 import serial
+from matplotlib import pyplot as plt
+
 import adafruit_fingerprint
 
 # led = DigitalInOut(board.D13)

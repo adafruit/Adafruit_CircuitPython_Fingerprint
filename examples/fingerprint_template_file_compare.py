@@ -21,10 +21,9 @@ Implementation Notes
 * `Panel Mount Fingerprint sensor <https://www.adafruit.com/product/4651>`_ (Product ID: 4651)
 """
 
-
 import serial
-import adafruit_fingerprint
 
+import adafruit_fingerprint
 
 # import board (if you are using a micropython board)
 # uart = busio.UART(board.TX, board.RX, baudrate=57600)
@@ -187,7 +186,7 @@ while True:
     print("----------------")
     c = input("> ")
 
-    if c in ("x", "q"):
+    if c in {"x", "q"}:
         print("Exiting fingerprint example program")
         # turn off LED
         set_led_local(mode=4)

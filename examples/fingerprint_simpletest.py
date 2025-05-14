@@ -2,9 +2,11 @@
 # SPDX-License-Identifier: MIT
 
 import time
+
 import board
 import busio
 from digitalio import DigitalInOut, Direction
+
 import adafruit_fingerprint
 
 led = DigitalInOut(board.D13)

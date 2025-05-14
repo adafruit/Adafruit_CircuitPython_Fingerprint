@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: MIT
 
 import time
+
 import serial
 
 import adafruit_fingerprint
@@ -173,7 +174,7 @@ def save_fingerprint_image(filename):
             return False
 
     # let PIL take care of the image headers and file structure
-    from PIL import Image  # pylint: disable=import-outside-toplevel
+    from PIL import Image  # noqa: PLC0415
 
     img = Image.new("L", (192, 192), "white")
     pixeldata = img.load()
@@ -213,7 +214,7 @@ def get_num(max_number):
     i = -1
     while (i > max_number - 1) or (i < 0):
         try:
-            i = int(input("Enter ID # from 0-{}: ".format(max_number - 1)))
+            i = int(input(f"Enter ID # from 0-{max_number - 1}: "))
         except ValueError:
             pass
     return i

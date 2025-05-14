@@ -2,8 +2,10 @@
 # SPDX-License-Identifier: MIT
 
 import time
+
 import board
 import busio
+
 import adafruit_fingerprint
 
 uart = busio.UART(board.TX, board.RX, baudrate=57600)
