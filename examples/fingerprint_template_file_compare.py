@@ -21,10 +21,9 @@ Implementation Notes
 * `Panel Mount Fingerprint sensor <https://www.adafruit.com/product/4651>`_ (Product ID: 4651)
 """
 
-
 import serial
-import adafruit_fingerprint
 
+import adafruit_fingerprint
 
 # import board (if you are using a micropython board)
 # uart = busio.UART(board.TX, board.RX, baudrate=57600)
@@ -51,7 +50,6 @@ def sensor_reset():
     print("Sensor is reset.")
 
 
-# pylint: disable=too-many-branches
 def fingerprint_check_file():
     """Compares a new fingerprint template to an existing template stored in a file
     This is useful when templates are stored centrally (i.e. in a database)"""
@@ -81,7 +79,6 @@ def fingerprint_check_file():
     return False
 
 
-# pylint: disable=too-many-statements
 def enroll_save_to_file():
     """Take a 2 finger images and template it, then store it in a file"""
     set_led_local(color=3, mode=1)
@@ -154,7 +151,6 @@ def enroll_save_to_file():
     return True
 
 
-# pylint: disable=broad-except
 def set_led_local(color=1, mode=3, speed=0x80, cycles=0):
     """this is to make sure LED doesn't interfer with example
     running on models without LED support - needs testing"""
@@ -187,7 +183,7 @@ while True:
     print("----------------")
     c = input("> ")
 
-    if c in ("x", "q"):
+    if c in {"x", "q"}:
         print("Exiting fingerprint example program")
         # turn off LED
         set_led_local(mode=4)
