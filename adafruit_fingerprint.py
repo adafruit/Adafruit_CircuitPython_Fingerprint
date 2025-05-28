@@ -27,6 +27,7 @@ Implementation Notes
 
 try:
     from typing import List, Tuple, Union
+
     from serial import Serial
 except ImportError:
     pass
