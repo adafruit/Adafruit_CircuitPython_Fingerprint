@@ -27,6 +27,8 @@ Implementation Notes
 
 try:
     from typing import List, Tuple, Union
+
+    from serial import Serial
 except ImportError:
     pass
 
@@ -114,7 +116,11 @@ class Adafruit_Fingerprint:
     system_id = None
     status_register = None
 
-    def __init__(self, uart: UART, passwd: Tuple[int, int, int, int] = (0, 0, 0, 0)):
+    def __init__(
+        self,
+        uart: Union[UART, "Serial"],
+        passwd: Tuple[int, int, int, int] = (0, 0, 0, 0),
+    ):
         # Create object with UART for interface, and default 32-bit password
         self.password = passwd
         self._uart = uart
