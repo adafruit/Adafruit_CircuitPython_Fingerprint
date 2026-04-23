@@ -423,14 +423,14 @@ class Adafruit_Fingerprint:
 
     def _send_packet(self, data: List[int]):
         packet = [_STARTCODE >> 8, _STARTCODE & 0xFF]
-        packet = packet + self.address
+        packet += self.address
         packet.append(_COMMANDPACKET)  # the packet type
 
         length = len(data) + 2
         packet.append(length >> 8)
         packet.append(length & 0xFF)
 
-        packet = packet + data
+        packet += data
 
         checksum = sum(packet[6:])
         packet.append(checksum >> 8)
@@ -458,13 +458,13 @@ class Adafruit_Fingerprint:
         for i in range(int(len(data) / data_length)):
             start = i * data_length
             end = (i + 1) * data_length
-            left = left - data_length
+            left -= data_length
             self._print_debug("_send_data data start:", start)
             self._print_debug("_send_data data end:", end)
             self._print_debug("_send_data i:", i)
 
             packet = [_STARTCODE >> 8, _STARTCODE & 0xFF]
-            packet = packet + self.address
+            packet += self.address
 
             if left <= 0:
                 packet.append(_ENDDATAPACKET)

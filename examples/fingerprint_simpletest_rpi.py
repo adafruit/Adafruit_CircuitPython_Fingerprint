@@ -137,7 +137,7 @@ def enroll_finger(location):
             print("Other error")
         return False
 
-    print("Storing model #%d..." % location, end="")
+    print(f"Storing model #{location}...", end="")
     i = finger.store_model(location)
     if i == adafruit_fingerprint.OK:
         print("Stored")

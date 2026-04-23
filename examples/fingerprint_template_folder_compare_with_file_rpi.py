@@ -216,25 +216,25 @@ def main():
         print("q) Exit")
         print("----------------")
         user_choice = input("> ")
-        match user_choice.lower():
-            case "e":
-                enroll_finger(get_num(finger.library_size))
-            case "f":
-                print_fingerprint()
-            case "d":
-                delete_fingerprint()
-            case "s":
-                save_fingerprint_image(f"fingerprint_{int(time.time())}.png")
-            case "cf":
-                fingerprint_check_folder()
-            case "esf":
-                enroll_save_to_file()
-            case "r":
-                reset_library()
-            case "q":
-                exit_program()
-            case _:
-                print("Invalid option.")
+        choice = user_choice.lower()
+        if choice == "e":
+            enroll_finger(get_num(finger.library_size))
+        elif choice == "f":
+            print_fingerprint()
+        elif choice == "d":
+            delete_fingerprint()
+        elif choice == "s":
+            save_fingerprint_image(f"fingerprint_{int(time.time())}.png")
+        elif choice == "cf":
+            fingerprint_check_folder()
+        elif choice == "esf":
+            enroll_save_to_file()
+        elif choice == "r":
+            reset_library()
+        elif choice == "q":
+            exit_program()
+        else:
+            print("Invalid option.")
 
 
 def print_fingerprint():
